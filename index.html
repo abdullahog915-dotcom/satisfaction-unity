@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LUMEN - Crafted Light, Timeless Elegance</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&amp;family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#5f5e5e",
+                    "on-primary": "#313030",
+                    "primary-container": "#0a0a0a",
+                    "surface-dim": "#121411",
+                    "error": "#ffb4ab",
+                    "on-error": "#690005",
+                    "on-tertiary": "#0f334d",
+                    "inverse-surface": "#e3e3de",
+                    "secondary-container": "#824d00",
+                    "primary-fixed-dim": "#c9c6c5",
+                    "on-secondary-fixed": "#2c1700",
+                    "tertiary-fixed-dim": "#aacaea",
+                    "on-primary-fixed": "#1c1b1b",
+                    "on-primary-container": "#7b7979",
+                    "on-tertiary-fixed-variant": "#294a64",
+                    "outline": "#8e9192",
+                    "on-tertiary-container": "#5d7c9a",
+                    "on-surface": "#e3e3de",
+                    "on-secondary-container": "#ffc68b",
+                    "on-tertiary-fixed": "#001d32",
+                    "outline-variant": "#444748",
+                    "background": "#121411",
+                    "error-container": "#93000a",
+                    "surface-container": "#1e201d",
+                    "surface-container-highest": "#333532",
+                    "secondary-fixed-dim": "#ffb86a",
+                    "inverse-on-surface": "#2f312e",
+                    "surface-tint": "#c9c6c5",
+                    "secondary-fixed": "#ffdcbc",
+                    "surface-container-lowest": "#0d0f0c",
+                    "surface-bright": "#383a36",
+                    "on-surface-variant": "#c4c7c7",
+                    "tertiary-container": "#000b17",
+                    "surface": "#121411",
+                    "on-primary-fixed-variant": "#474646",
+                    "secondary": "#ffb86a",
+                    "on-background": "#e3e3de",
+                    "on-secondary": "#492900",
+                    "tertiary-fixed": "#cde5ff",
+                    "surface-container-high": "#292a27",
+                    "primary-fixed": "#e5e2e1",
+                    "surface-variant": "#333532",
+                    "surface-container-low": "#1a1c19",
+                    "on-secondary-fixed-variant": "#683d00",
+                    "tertiary": "#aacaea",
+                    "on-error-container": "#ffdad6",
+                    "primary": "#c9c6c5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1440px",
+                    "margin-mobile": "20px",
+                    "unit": "8px",
+                    "margin-desktop": "80px",
+                    "section-gap": "160px",
+                    "gutter": "32px"
+            },
+            "fontFamily": {
+                    "display": ["Playfair Display", "serif"],
+                    "body": ["Hanken Grotesk", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+        
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        /* Custom Hover Effects for Chiaroscuro Aesthetic */
+        .btn-glow {
+            box-shadow: 0 0 10px 0 rgba(255, 184, 106, 0.0);
+            transition: all 0.5s ease-in-out;
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 20px 2px rgba(255, 184, 106, 0.4);
+            background-color: rgba(255, 184, 106, 0.1);
+            text-shadow: 0 0 8px rgba(255, 184, 106, 0.6);
+            border-color: #ffb86a;
+        }
+
+        /* Product Card & Hover Swap Styles */
+        .product-card {
+            border-radius: 12px;
+            border: 0.5px solid rgba(68, 71, 72, 0.4);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                        border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                        box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: transform;
+        }
+
+        @media (hover: hover) {
+            .product-card:hover {
+                transform: scale(1.02);
+                border-color: rgba(255, 184, 106, 0.7);
+                box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.7), 0 0 16px 0 rgba(255, 184, 106, 0.15);
+            }
+            .product-card:hover .product-img-secondary {
+                opacity: 1;
+            }
+        }
+
+        .product-img-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            border-top-left-radius: 11.5px;
+            border-top-right-radius: 11.5px;
+            background-color: #0d0f0c;
+        }
+
+        .product-img-primary,
+        .product-img-secondary {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 16px;
+        }
+
+        .product-img-primary {
+            z-index: 1;
+        }
+
+        .product-img-secondary {
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        /* Ambient Background Glow */
+        .ambient-glow {
+            background: radial-gradient(circle at 50% 50%, rgba(255, 184, 106, 0.15) 0%, rgba(10, 10, 10, 0) 50%),
+                        radial-gradient(circle at 50% 100%, rgba(170, 202, 234, 0.05) 0%, rgba(10, 10, 10, 0) 50%);
+        }
+
+        /* Scroll Animation */
+        @keyframes scrollPulse {
+            0% { transform: translateY(-100%); opacity: 0; }
+            50% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
+        .scroll-dot {
+            animation: scrollPulse 2s infinite ease-in-out;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        /* Scroll Reveal Animations */
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+            will-change: opacity, transform;
+        }
+        .reveal-element.is-revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased overflow-x-hidden selection:bg-secondary selection:text-on-secondary">
+<!-- TopNavBar Component -->
+<header class="fixed top-0 w-full z-50 bg-[#0d0f0c]/85 backdrop-blur-md border-b border-outline-variant/30 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-unit transition-all duration-700 ease-in-out">
+<div class="flex-shrink-0">
+<a class="font-display text-2xl md:text-3xl text-on-surface tracking-tighter hover:text-secondary duration-500" href="index.html">LUMEN</a>
+</div>
+<nav class="hidden md:flex gap-gutter items-center">
+<a class="font-body text-xs uppercase tracking-widest text-secondary border-b-2 border-secondary pb-1 transition-colors duration-300" href="index.html">Home</a>
+<a class="font-body text-xs uppercase tracking-widest text-on-surface hover:text-secondary transition-colors duration-300" href="#collection">Collection</a>
+<a class="font-body text-xs uppercase tracking-widest text-on-surface hover:text-secondary transition-colors duration-300" href="#about">About</a>
+<a class="font-body text-xs uppercase tracking-widest text-on-surface hover:text-secondary transition-colors duration-300" href="#footer">Contact</a>
+</nav>
+<div class="flex items-center gap-unit text-primary hover:text-secondary duration-500">
+<a href="products.html" class="p-2 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors" title="View Full Collection">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</a>
+</div>
+</header>
+
+<!-- Main Content -->
+<main>
+<!-- Hero Section -->
+<section class="relative h-screen w-full flex flex-col justify-center items-center bg-[#0a0a0a] overflow-hidden" style="background-color: #0a0a0a;">
+<!-- Video Background Container -->
+<div class="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#0a0a0a]" style="background-color: #0a0a0a;">
+<!-- Dual Video Elements for Seamless Crossfade Transitions -->
+<video id="hero-video-a" class="absolute inset-0 w-full h-full object-cover opacity-100 transition-opacity duration-700 ease-in-out z-0" muted playsinline autoplay preload="auto" src="assets/scene1.mp4"></video>
+<video id="hero-video-b" class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-in-out z-0" muted playsinline></video>
+<!-- Ambient Glow -->
+<div class="absolute inset-0 z-10 ambient-glow pointer-events-none"></div>
+<!-- Dark Semi-transparent Overlay for Text Legibility -->
+<div class="absolute inset-0 z-20 pointer-events-none" style="background-color: rgba(0,0,0,0.45);"></div>
+</div>
+
+<!-- Content Canvas -->
+<div class="relative z-30 flex flex-col items-center text-center px-margin-mobile max-w-4xl mx-auto">
+<h1 class="font-display text-4xl md:text-6xl text-on-surface mb-6 opacity-0 translate-y-4 font-semibold tracking-tight" style="animation: fadeUp 1s 0.2s forwards ease-out;">
+                    Crafted Light,<br/>Timeless Elegance
+                </h1>
+<p class="font-body text-base md:text-lg text-on-surface-variant max-w-2xl mb-12 opacity-0 translate-y-4" style="animation: fadeUp 1s 0.4s forwards ease-out;">
+                    Discover the artistry of handcrafted mother of pearl, mosaic glass, and metal luminaires.
+                </p>
+<a class="btn-glow px-8 py-4 border border-outline-variant/50 rounded-lg font-body text-xs text-on-surface uppercase tracking-widest backdrop-blur-sm opacity-0 translate-y-4 inline-block font-semibold" href="#collection" style="animation: fadeUp 1s 0.6s forwards ease-out;">
+                    Explore Collection
+                </a>
+</div>
+<!-- Scroll Indicator -->
+<div class="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 opacity-0 z-30" style="animation: fadeIn 2s 1.5s forwards;">
+<div class="h-16 w-px bg-outline-variant relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1/2 bg-secondary scroll-dot shadow-[0_0_8px_#ffb86a]"></div>
+</div>
+<span class="font-body text-[10px] text-on-surface-variant tracking-widest uppercase">Scroll</span>
+</div>
+</section>
+
+<!-- Collection Section (Dynamically Loaded from products.json) -->
+<section id="collection" class="py-24 px-margin-mobile md:px-margin-desktop max-w-[1440px] mx-auto">
+<div class="text-center mb-16 reveal-element">
+<span class="font-body text-xs text-secondary uppercase tracking-[0.25em] block mb-3 font-semibold">Craftsmanship & Light</span>
+<h2 class="font-display text-3xl md:text-5xl text-on-surface font-semibold">Curated Collection</h2>
+<p class="font-body text-base text-on-surface-variant max-w-xl mx-auto mt-4 leading-relaxed">
+        Explore our full series of hand-crafted lighting fixtures and mosaic vases, engineered to transform atmosphere with warm, golden luminescence.
+    </p>
+</div>
+
+<!-- Dynamic Homepage Product Grid -->
+<div id="home-product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px]">
+    <!-- Dynamically Populated via JS -->
+</div>
+
+<!-- View Full Collection CTA -->
+<div class="text-center mt-16 reveal-element">
+    <a href="products.html" class="btn-glow inline-flex items-center gap-3 px-8 py-4 border border-secondary text-secondary font-body text-xs uppercase tracking-widest rounded-lg font-semibold hover:bg-secondary/10 transition-all">
+        Browse Collection Catalog <span class="material-symbols-outlined text-sm">arrow_forward</span>
+    </a>
+</div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="py-24 bg-surface-container-lowest border-y border-outline-variant/30 px-margin-mobile md:px-margin-desktop">
+<div class="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+<!-- About Text Block -->
+<div class="reveal-element">
+<span class="font-body text-xs text-secondary uppercase tracking-[0.25em] block mb-3 font-semibold">Our Philosophy</span>
+<h2 class="font-display text-3xl md:text-5xl text-on-surface mb-6 font-semibold">
+        Light as an Art Form
+    </h2>
+<p class="font-body text-base text-on-surface-variant mb-6 leading-relaxed">
+        At LUMEN, every luminaire is more than a light source — it is a balance of shadow, metallic sheen, mosaic artistry, and architectural form.
+    </p>
+<p class="font-body text-sm text-on-surface-variant/80 mb-8 leading-relaxed">
+        Crafted by master artisans using natural mother of pearl, crackle mosaic glass, and hand-forged metals, our designs bring subtle elegance and timeless atmosphere into modern spaces.
+    </p>
+<div class="flex gap-4">
+<a class="btn-glow px-6 py-3 border border-secondary text-secondary font-body text-xs uppercase tracking-widest rounded-lg font-semibold" href="products.html">View Collection</a>
+</div>
+</div>
+
+<!-- About Feature Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div class="reveal-element bg-surface-container p-6 rounded-xl border border-outline-variant/30" data-delay="0">
+<span class="material-symbols-outlined text-3xl text-secondary mb-3">handshake</span>
+<h4 class="font-display text-lg text-on-surface mb-2 font-semibold">Hand-Forged</h4>
+<p class="font-body text-sm text-on-surface-variant">Each piece meticulously shaped by master artisans.</p>
+</div>
+<div class="reveal-element bg-surface-container p-6 rounded-xl border border-outline-variant/30" data-delay="100">
+<span class="material-symbols-outlined text-3xl text-secondary mb-3">bolt</span>
+<h4 class="font-display text-lg text-on-surface mb-2 font-semibold">Warm Ambient Illumination</h4>
+<p class="font-body text-sm text-on-surface-variant">Soft ambient warmth designed for luxury interiors.</p>
+</div>
+<div class="reveal-element bg-surface-container p-6 rounded-xl border border-outline-variant/30" data-delay="200">
+<span class="material-symbols-outlined text-3xl text-secondary mb-3">eco</span>
+<h4 class="font-display text-lg text-on-surface mb-2 font-semibold">Mother of Pearl & Mosaic</h4>
+<p class="font-body text-sm text-on-surface-variant">Natural iridescent shell inlays and crackle glass.</p>
+</div>
+<div class="reveal-element bg-surface-container p-6 rounded-xl border border-outline-variant/30" data-delay="300">
+<span class="material-symbols-outlined text-3xl text-secondary mb-3">verified</span>
+<h4 class="font-display text-lg text-on-surface mb-2 font-semibold">Artisan Quality</h4>
+<p class="font-body text-sm text-on-surface-variant">Durable construction with timeless aesthetic appeal.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<!-- Footer Component -->
+<footer id="footer" class="bg-surface border-t border-outline-variant/30 w-full px-margin-mobile md:px-margin-desktop py-12 flex flex-col md:flex-row justify-between items-center z-40 relative">
+<div class="mb-4 md:mb-0 text-center md:text-left">
+<span class="font-display text-2xl text-on-surface block tracking-tighter">LUMEN</span>
+<p class="font-body text-xs text-on-surface-variant mt-2">© 2026 LUMEN ARTISANAL LIGHTING. ALL RIGHTS RESERVED.</p>
+</div>
+<nav class="flex gap-6 items-center">
+<a class="font-body text-xs text-on-surface-variant hover:text-secondary transition-colors" href="index.html">Home</a>
+<a class="font-body text-xs text-on-surface-variant hover:text-secondary transition-colors" href="products.html">Collection</a>
+<a class="font-body text-xs text-on-surface-variant hover:text-secondary transition-colors" href="#about">About</a>
+</nav>
+</footer>
+
+<script>
+    function handleImageError(imgEl) {
+        if (!imgEl.dataset.fallbackStep) {
+            imgEl.dataset.fallbackStep = '1';
+            if (imgEl.src.endsWith('.jpg')) {
+                imgEl.src = imgEl.src.replace(/\.jpg$/, '.png');
+                return;
+            }
+        }
+        if (imgEl.dataset.fallbackStep === '1') {
+            imgEl.dataset.fallbackStep = '2';
+            if (imgEl.src.endsWith('.png')) {
+                imgEl.src = imgEl.src.replace(/\.png$/, '.jpeg');
+                return;
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('data/products.json')
+            .then(res => res.json())
+            .then(data => {
+                const products = Array.isArray(data) ? data : (data.products || []);
+                const homeGrid = document.getElementById('home-product-grid');
+                if (!homeGrid) return;
+
+                function formatPrice(amount) {
+                    return '₹' + Number(amount).toLocaleString('en-IN');
+                }
+
+                homeGrid.innerHTML = products.map((product, idx) => {
+                    const delay = (idx % 3) * 80;
+                    const images = product.images || [];
+                    const primaryImg = images[0] || 'assets/products/lamp-01-1.png';
+                    const secondaryImg = images[1] || null;
+
+                    const secondaryImageHtml = secondaryImg 
+                        ? `<img src="${secondaryImg}" alt="${product.name} alternate view" class="product-img-secondary" onerror="handleImageError(this)" loading="lazy" />`
+                        : '';
+
+                    const stockBadge = product.inStock !== false 
+                        ? `<span class="bg-emerald-950/80 backdrop-blur-sm text-emerald-400 border border-emerald-500/40 text-[10px] uppercase font-semibold tracking-wider px-2.5 py-1 rounded-full">In Stock</span>`
+                        : `<span class="bg-rose-950/80 backdrop-blur-sm text-rose-400 border border-rose-500/40 text-[10px] uppercase font-semibold tracking-wider px-2.5 py-1 rounded-full">Out of Stock</span>`;
+
+                    return `
+                    <a href="product-detail.html?id=${product.id}" class="product-card bg-surface-container flex flex-col group overflow-hidden text-inherit reveal-element" data-delay="${delay}">
+                        <!-- Image Swap Box -->
+                        <div class="product-img-container">
+                            <img src="${primaryImg}" alt="${product.name}" class="product-img-primary" onerror="handleImageError(this)" loading="lazy" />
+                            ${secondaryImageHtml}
+                            <div class="absolute top-3 left-3 z-10">
+                                <span class="bg-[#0d0f0c]/80 backdrop-blur-sm text-secondary border border-secondary/30 text-[10px] uppercase font-semibold tracking-widest px-2.5 py-1 rounded-full">${product.category}</span>
+                            </div>
+                            <div class="absolute top-3 right-3 z-10">
+                                ${stockBadge}
+                            </div>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="p-6 flex flex-col flex-grow justify-between">
+                            <div>
+                                <h3 class="font-display text-xl text-on-surface group-hover:text-secondary transition-colors duration-300 font-semibold leading-snug mb-2">${product.name}</h3>
+                                <p class="font-body text-xs text-on-surface-variant/70 uppercase tracking-wider mb-4">${product.material ? 'Material: ' + product.material : ''}</p>
+                            </div>
+                            
+                            <div class="pt-4 border-t border-outline-variant/30 flex justify-between items-center mt-auto">
+                                <div>
+                                    <span class="font-body text-[10px] text-on-surface-variant block uppercase tracking-widest">Price</span>
+                                    <span class="font-body text-lg font-bold text-secondary">${formatPrice(product.price)}</span>
+                                </div>
+                                <span class="btn-glow px-4 py-2 border border-outline-variant/60 rounded-lg font-body text-xs uppercase tracking-widest text-on-surface group-hover:text-secondary group-hover:border-secondary/60 transition-all flex items-center gap-1">
+                                    View <span class="material-symbols-outlined text-sm group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                    `;
+                }).join('');
+
+                document.querySelectorAll('#home-product-grid .reveal-element').forEach(element => {
+                    revealObserver.observe(element);
+                });
+            })
+            .catch(err => console.error("Error loading products on homepage:", err));
+
+        const scenes = [
+            'assets/scene1.mp4',
+            'assets/scene2.mp4',
+            'assets/scene4.mp4',
+            'assets/scene5.mp4',
+            'assets/scene6.mp4'
+        ];
+
+        let currentSceneIndex = 0;
+        const videoA = document.getElementById('hero-video-a');
+        const videoB = document.getElementById('hero-video-b');
+
+        if (videoA && videoB) {
+            let activeVideo = videoA;
+            let standbyVideo = videoB;
+
+            function prepareVideo(videoEl, index) {
+                const isMobile = window.innerWidth < 768;
+                videoEl.src = scenes[index];
+                videoEl.preload = isMobile ? 'metadata' : 'auto';
+                videoEl.load();
+            }
+
+            prepareVideo(videoA, 0);
+            prepareVideo(videoB, 1);
+
+            function safePlay(vid) {
+                const playPromise = vid.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(function (error) {
+                        console.warn('Video play error on ' + vid.src, error);
+                    });
+                }
+            }
+
+            safePlay(videoA);
+
+            function nextScene() {
+                currentSceneIndex = (currentSceneIndex + 1) % scenes.length;
+                const nextIndexAfter = (currentSceneIndex + 1) % scenes.length;
+
+                safePlay(standbyVideo);
+
+                standbyVideo.classList.remove('opacity-0');
+                standbyVideo.classList.add('opacity-100');
+                activeVideo.classList.remove('opacity-100');
+                activeVideo.classList.add('opacity-0');
+
+                const temp = activeVideo;
+                activeVideo = standbyVideo;
+                standbyVideo = temp;
+
+                prepareVideo(standbyVideo, nextIndexAfter);
+            }
+
+            function onEnded(e) {
+                if (e.target === activeVideo) {
+                    nextScene();
+                }
+            }
+
+            function onError(e) {
+                console.warn('Video loading error on scene:', e.target.src);
+                if (e.target === activeVideo) {
+                    nextScene();
+                }
+            }
+
+            videoA.addEventListener('ended', onEnded);
+            videoB.addEventListener('ended', onEnded);
+            videoA.addEventListener('error', onError);
+            videoB.addEventListener('error', onError);
+        }
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = entry.target;
+                    const delay = parseInt(target.getAttribute('data-delay') || '0', 10);
+                    
+                    setTimeout(() => {
+                        target.classList.add('is-revealed');
+                    }, delay);
+
+                    observer.unobserve(target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-element').forEach(element => {
+            revealObserver.observe(element);
+        });
+    });
+</script>
+</body></html>

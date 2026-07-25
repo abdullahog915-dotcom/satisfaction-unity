@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Product Details — LUMEN Artisanal Lighting</title>
+
+    <!-- Material Symbols & Google Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+    <!-- Tailwind CSS & Config -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "background": "#121411",
+              "surface": "#121411",
+              "surface-container": "#1e201d",
+              "surface-container-high": "#292a27",
+              "surface-container-lowest": "#0d0f0c",
+              "on-surface": "#e3e3de",
+              "on-surface-variant": "#c4c7c7",
+              "secondary": "#ffb86a",
+              "outline-variant": "#444748"
+            },
+            fontFamily: {
+              "display": ["Playfair Display", "serif"],
+              "body": ["Hanken Grotesk", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .btn-glow {
+            box-shadow: 0 0 12px 0 rgba(255, 184, 106, 0.15);
+            transition: all 0.4s ease-in-out;
+        }
+        .btn-glow:hover {
+            box-shadow: 0 0 24px 4px rgba(255, 184, 106, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Description Line Breaks & Typography */
+        .product-description-text {
+            white-space: pre-line;
+            line-height: 1.7;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        /* Main Image Gallery Transition */
+        #main-product-img {
+            transition: opacity 0.3s ease-in-out;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased selection:bg-secondary selection:text-black flex flex-col min-h-screen">
+
+<!-- TopNavBar Component -->
+<header class="fixed top-0 w-full z-50 bg-[#0d0f0c]/85 backdrop-blur-md border-b border-outline-variant/30 flex justify-between items-center px-6 md:px-16 py-4 transition-all duration-500">
+    <div class="flex-shrink-0">
+        <a class="font-display text-2xl md:text-3xl text-on-surface tracking-tighter hover:text-secondary duration-300" href="index.html">LUMEN</a>
+    </div>
+    <nav class="hidden md:flex gap-8 items-center">
+        <a class="font-body text-xs tracking-widest uppercase text-on-surface hover:text-secondary transition-colors duration-300" href="index.html">Home</a>
+        <a class="font-body text-xs tracking-widest uppercase text-secondary border-b-2 border-secondary pb-1 transition-colors duration-300" href="products.html">Collection</a>
+        <a class="font-body text-xs tracking-widest uppercase text-on-surface hover:text-secondary transition-colors duration-300" href="index.html#about">About</a>
+        <a class="font-body text-xs tracking-widest uppercase text-on-surface hover:text-secondary transition-colors duration-300" href="#footer">Contact</a>
+    </nav>
+    <div class="flex items-center gap-4 text-on-surface">
+        <a href="products.html" class="p-2 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors" title="View Collection">
+            <span class="material-symbols-outlined">shopping_bag</span>
+        </a>
+    </div>
+</header>
+
+<!-- Main Detail Content -->
+<main class="flex-grow pt-28 pb-20 px-6 md:px-16 max-w-[1440px] mx-auto w-full">
+    <!-- Back to Collection Link -->
+    <div class="mb-8">
+        <a href="products.html" class="inline-flex items-center gap-2 font-body text-xs uppercase tracking-widest text-on-surface-variant hover:text-secondary transition-colors duration-300 group">
+            <span class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
+            Back to Collection
+        </a>
+    </div>
+
+    <!-- Product Container (Loaded via JS) -->
+    <div id="product-detail-container" class="min-h-[500px]">
+        <div class="flex items-center justify-center py-24 text-on-surface-variant">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-secondary mr-3"></div>
+            <span class="font-body text-sm tracking-wider uppercase">Loading Luminaire Details...</span>
+        </div>
+    </div>
+</main>
+
+<!-- Footer Component -->
+<footer id="footer" class="bg-surface-container-lowest border-t border-outline-variant/30 w-full px-6 md:px-16 py-12 flex flex-col md:flex-row justify-between items-center mt-auto">
+    <div class="mb-6 md:mb-0 text-center md:text-left">
+        <span class="font-display text-2xl text-on-surface block tracking-tighter">LUMEN</span>
+        <p class="font-body text-xs text-on-surface-variant mt-2">© 2026 LUMEN ARTISANAL LIGHTING. ALL RIGHTS RESERVED.</p>
+    </div>
+    <nav class="flex gap-6 items-center">
+        <a class="font-body text-xs text-on-surface-variant hover:text-secondary transition-colors" href="index.html">Home</a>
+        <a class="font-body text-xs text-on-surface-variant hover:text-secondary transition-colors" href="products.html">Collection</a>
+        <a class="font-body text-xs text-on-surface-variant hover:text-secondary transition-colors" href="index.html#about">About</a>
+    </nav>
+</footer>
+
+<!-- Product Detail JS Script -->
+<script>
+    function handleImageError(imgEl) {
+        if (!imgEl.dataset.fallbackStep) {
+            imgEl.dataset.fallbackStep = '1';
+            if (imgEl.src.endsWith('.jpg')) {
+                imgEl.src = imgEl.src.replace(/\.jpg$/, '.png');
+                return;
+            }
+        }
+        if (imgEl.dataset.fallbackStep === '1') {
+            imgEl.dataset.fallbackStep = '2';
+            if (imgEl.src.endsWith('.png')) {
+                imgEl.src = imgEl.src.replace(/\.png$/, '.jpeg');
+                return;
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('product-detail-container');
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        if (!productId) {
+            renderError("No product selected. Please select a product from the collection.");
+            return;
+        }
+
+        function formatPrice(amount) {
+            return '₹' + Number(amount).toLocaleString('en-IN');
+        }
+
+        fetch('data/products.json')
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to load product data");
+                return res.json();
+            })
+            .then(data => {
+                const products = Array.isArray(data) ? data : (data.products || []);
+                const product = products.find(p => p.id === productId);
+
+                if (!product) {
+                    renderError(`Product with ID "${productId}" was not found in our collection.`);
+                    return;
+                }
+
+                renderProductDetail(product);
+            })
+            .catch(err => {
+                console.error("Error loading product detail:", err);
+                renderError("Unable to retrieve product details at this time.");
+            });
+
+        function renderError(message) {
+            container.innerHTML = `
+                <div class="text-center py-20 bg-surface-container/30 rounded-2xl border border-outline-variant/30 max-w-xl mx-auto my-12 p-8">
+                    <span class="material-symbols-outlined text-5xl text-rose-400/80 mb-4 block">error_outline</span>
+                    <h2 class="font-display text-2xl text-on-surface mb-2">Item Not Found</h2>
+                    <p class="font-body text-sm text-on-surface-variant mb-6">${message}</p>
+                    <a href="products.html" class="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-black font-body text-xs uppercase tracking-widest font-semibold rounded-lg hover:bg-secondary/90 transition-colors">
+                        <span class="material-symbols-outlined text-sm">grid_view</span> Browse Collection
+                    </a>
+                </div>
+            `;
+        }
+
+        function renderProductDetail(product) {
+            document.title = `${product.name} — LUMEN Artisanal Lighting`;
+
+            const images = product.images || [];
+            const img0 = images[0] || 'assets/products/lamp-01-1.png';
+            const img1 = images[1] || img0;
+
+            const stockBadgeHtml = product.inStock !== false
+                ? `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-emerald-950/70 text-emerald-400 border border-emerald-500/40"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> In Stock</span>`
+                : `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-rose-950/70 text-rose-400 border border-rose-500/40"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> Out of Stock</span>`;
+
+            const whatsappMessage = encodeURIComponent(`I'm interested in ${product.name}`);
+            const whatsappUrl = `https://wa.me/91XXXXXXXXXX?text=${whatsappMessage}`;
+
+            container.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+                    <!-- Left: Gallery Section -->
+                    <div class="lg:col-span-7 flex flex-col gap-6">
+                        <!-- Main Display Image Container -->
+                        <div class="relative w-full aspect-square rounded-[12px] overflow-hidden border border-outline-variant/40 bg-surface-container-lowest flex items-center justify-center p-6 shadow-2xl">
+                            <img id="main-product-img" src="${img0}" alt="${product.name}" class="w-full h-full object-contain" onerror="handleImageError(this)" />
+                            
+                            <div class="absolute top-4 left-4 z-10">
+                                <span class="bg-[#0d0f0c]/85 backdrop-blur-md text-secondary border border-secondary/30 text-xs uppercase font-semibold tracking-widest px-3 py-1.5 rounded-full">${product.category}</span>
+                            </div>
+                        </div>
+
+                        <!-- Thumbnails Row -->
+                        <div class="flex gap-4">
+                            <button onclick="switchImage('${img0}', this)" class="thumb-btn active w-24 h-24 rounded-lg overflow-hidden border-2 border-secondary transition-all bg-surface-container-lowest p-2 relative flex-shrink-0">
+                                <img src="${img0}" alt="${product.name} View 1" class="w-full h-full object-contain" onerror="handleImageError(this)" />
+                            </button>
+                            <button onclick="switchImage('${img1}', this)" class="thumb-btn w-24 h-24 rounded-lg overflow-hidden border-2 border-outline-variant/40 hover:border-secondary/60 transition-all bg-surface-container-lowest p-2 relative flex-shrink-0">
+                                <img src="${img1}" alt="${product.name} View 2" class="w-full h-full object-contain" onerror="handleImageError(this)" />
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Details Section -->
+                    <div class="lg:col-span-5 flex flex-col">
+                        <!-- Category & Stock Header -->
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="font-body text-xs uppercase tracking-[0.2em] text-secondary font-semibold">${product.category}</span>
+                            ${stockBadgeHtml}
+                        </div>
+
+                        <!-- Title -->
+                        <h1 class="font-display text-3xl md:text-4xl lg:text-5xl text-on-surface font-semibold leading-tight mb-4 tracking-tight">${product.name}</h1>
+
+                        <!-- Price -->
+                        <div class="mb-6 flex items-baseline gap-3 pb-6 border-b border-outline-variant/30">
+                            <span class="font-body text-3xl font-bold text-secondary">${formatPrice(product.price)}</span>
+                            <span class="font-body text-xs text-on-surface-variant uppercase tracking-wider">Inclusive of all taxes</span>
+                        </div>
+
+                        <!-- Material Specification -->
+                        ${product.material ? `
+                        <div class="mb-6 bg-surface-container/60 p-4 rounded-xl border border-outline-variant/30">
+                            <span class="font-body text-xs uppercase tracking-widest text-on-surface-variant block mb-1">Craftsmanship & Material</span>
+                            <span class="font-body text-sm text-on-surface font-medium capitalize flex items-center gap-2">
+                                <span class="material-symbols-outlined text-secondary text-base">verified</span>
+                                ${product.material}
+                            </span>
+                        </div>
+                        ` : ''}
+
+                        <!-- Description (pre-line paragraph breaks, line-height 1.7) -->
+                        <div class="mb-8">
+                            <h3 class="font-body text-xs uppercase tracking-widest text-on-surface-variant mb-3 font-semibold">About This Piece</h3>
+                            <div class="product-description-text font-body text-sm md:text-base text-on-surface-variant/90 leading-[1.7]">
+                                ${product.description}
+                            </div>
+                        </div>
+
+                        <!-- WhatsApp Action Button -->
+                        <div class="pt-6 border-t border-outline-variant/30">
+                            <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer" class="btn-glow w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-secondary text-black font-body text-xs md:text-sm font-bold uppercase tracking-widest rounded-lg transition-all duration-300">
+                                <span class="material-symbols-outlined text-xl">chat</span> Enquire on WhatsApp
+                            </a>
+                            <p class="font-body text-[11px] text-center text-on-surface-variant/60 mt-3 tracking-wider uppercase">Direct concierge response for orders & custom sizing</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.switchImage = function(src, btnEl) {
+            const mainImg = document.getElementById('main-product-img');
+            if (!mainImg) return;
+
+            mainImg.dataset.fallbackStep = '';
+            mainImg.style.opacity = '0';
+            setTimeout(() => {
+                mainImg.src = src;
+                mainImg.style.opacity = '1';
+            }, 150);
+
+            document.querySelectorAll('.thumb-btn').forEach(btn => {
+                btn.classList.remove('border-secondary');
+                btn.classList.add('border-outline-variant/40');
+            });
+
+            btnEl.classList.remove('border-outline-variant/40');
+            btnEl.classList.add('border-secondary');
+        };
+    });
+</script>
+</body>
+</html>
