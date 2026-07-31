@@ -49,15 +49,22 @@ html { scroll-behavior: smooth; }
 .product-img-primary { z-index: 1; }
 .product-img-secondary { z-index: 2; opacity: 0; transition: opacity 0.4s ease; }
 
-.hero-section { position: relative; width: 100%; height: 100vh; overflow: hidden; background: #000; }
-.hero-slide { position: absolute; inset: 0; z-index: 0; opacity: 0; transition: opacity 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-.hero-slide.active { opacity: 1; z-index: 1; }
-.hero-slide-media { position: absolute; inset: -5%; width: 110%; height: 110%; object-fit: cover; transform: scale(1); transition: transform 6s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-.hero-slide.active .hero-slide-media { transform: scale(1.05); }
+.hero-section { position: relative; width: 100%; margin-top: 130px; margin-bottom: 40px; padding: 0 24px; }
+.hero-container { position: relative; width: 100%; height: 480px; max-width: 1200px; background: #F7F4EC; margin-left: auto; margin-right: auto; border-radius: 60px; overflow: hidden; clip-path: inset(0 0 0 0 round 60px); -webkit-clip-path: inset(0 0 0 0 round 60px); }
+.hero-slide { position: absolute; inset: 0; z-index: 0; opacity: 0; transform: scale(1.05); transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+.hero-slide.active { opacity: 1; z-index: 1; transform: scale(1); }
+.hero-slide-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1); transition: transform 8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.hero-slide.active .hero-slide-media { transform: scale(1.08); }
 .hero-slide video.hero-slide-media { object-fit: cover; }
-.hero-overlay { position: absolute; inset: 0; z-index: 2; background: linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.2) 100%); pointer-events: none; }
 
-.hero-content { position: absolute; z-index: 3; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; padding-top: 90px; padding-left: 80px; padding-right: 80px; max-width: 700px; }
+.hero-nav-btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.12); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.9); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); opacity: 1; }
+.hero-nav-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); color: #fff; transform: translateY(-50%) scale(1.1); }
+.hero-nav-btn:active { transform: translateY(-50%) scale(0.95); }
+.hero-nav-btn:focus-visible { outline: 2px solid rgba(255,255,255,0.5); outline-offset: 4px; }
+.hero-nav-prev { left: 20px; }
+.hero-nav-next { right: 20px; }
+
+.hero-content { position: absolute; z-index: 3; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; padding-left: 80px; padding-right: 80px; max-width: 700px; }
 .hero-content-inner { position: relative; }
 .hero-text { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
 .hero-slide.active .hero-text { opacity: 1; transform: translateY(0); }
@@ -66,32 +73,26 @@ html { scroll-behavior: smooth; }
 .hero-text-3 { transition-delay: 0.55s; }
 .hero-text-4 { transition-delay: 0.75s; }
 
-.hero-nav-btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.08); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); cursor: pointer; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); transition: all 0.3s ease; opacity: 0; }
-.hero-section:hover .hero-nav-btn { opacity: 1; }
-.hero-nav-btn:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: #fff; transform: translateY(-50%) scale(1.05); }
-.hero-nav-btn:focus-visible { outline: 2px solid rgba(255,255,255,0.5); outline-offset: 4px; opacity: 1; }
-.hero-nav-prev { left: 24px; }
-.hero-nav-next { right: 24px; }
-
-.hero-indicators { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; align-items: center; gap: 12px; }
-.hero-ind { width: 8px; height: 8px; border-radius: 50%; border: none; background: rgba(255,255,255,0.3); cursor: pointer; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); padding: 0; }
-.hero-ind.active { background: #fff; width: 32px; border-radius: 4px; }
+.hero-indicators { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; align-items: center; gap: 10px; }
+.hero-ind { width: 8px; height: 8px; border-radius: 50%; border: none; background: rgba(255,255,255,0.4); cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 0; }
+.hero-ind.active { background: #fff; width: 32px; border-radius: 6px; }
+.hero-ind:hover { background: rgba(255,255,255,0.7); }
 .hero-ind:focus-visible { outline: 2px solid rgba(255,255,255,0.5); outline-offset: 3px; }
 
 @media (max-width: 1024px) {
-  .hero-content { padding-left: 48px; padding-right: 48px; }
-  .hero-nav-btn { width: 36px; height: 36px; opacity: 1; }
+  .hero-nav-btn { opacity: 1; }
 }
 
 @media (max-width: 768px) {
-  .hero-section { height: 100vh; }
-  .hero-content { position: absolute; top: auto; bottom: 0; left: 0; right: 0; justify-content: flex-end; padding: 32px 24px 100px; max-width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%); }
-  .hero-content-inner { text-align: center; }
-  .hero-text { transform: translateY(20px); }
+  .hero-section { margin-top: 120px; margin-bottom: 24px; padding: 0 16px; }
+  .hero-container { border-radius: 44px; height: 220px; width: 92%; margin-left: auto; margin-right: auto; clip-path: inset(0 0 0 0 round 44px); -webkit-clip-path: inset(0 0 0 0 round 44px); }
   .hero-nav-btn { display: none; }
-  .hero-indicators { bottom: 24px; gap: 10px; }
+  .hero-indicators { bottom: 14px; gap: 8px; }
   .hero-ind { width: 6px; height: 6px; }
   .hero-ind.active { width: 24px; }
+  .hero-content { position: absolute; top: auto; bottom: 0; left: 0; right: 0; justify-content: flex-end; padding: 32px 24px 80px; max-width: 100%; }
+  .hero-content-inner { text-align: center; }
+  .hero-text { transform: translateY(20px); }
 }
 
 @media (min-width: 1440px) {
@@ -124,6 +125,7 @@ html { scroll-behavior: smooth; }
 <main>
 <section class="hero-section" aria-label="Hero slideshow">
 
+<div class="hero-container">
 <div id="hero-slider" aria-live="polite">
 <div class="hero-slide active" data-index="0" role="group" aria-roledescription="slide" aria-label="Slide 1 of 4">
 <video class="hero-slide-media" autoplay muted playsinline preload="metadata" src="assets/banner-1.mp4" aria-hidden="true"></video>
@@ -139,28 +141,16 @@ html { scroll-behavior: smooth; }
 </div>
 </div>
 
-<div class="hero-overlay"></div>
-
-<div class="hero-content">
-<div class="hero-content-inner">
-<p class="hero-text hero-text-1 font-body text-[14px] md:text-[15px] font-[500] text-white/60 uppercase tracking-[0.15em] mb-4">Handcrafted Luminaires</p>
-<h1 class="hero-text hero-text-2 font-display text-[56px] md:text-[68px] font-[700] leading-[1.05] text-white mb-5 max-md:text-[36px] max-md:leading-[1.1]" style="letter-spacing:-0.03em;">Crafted Light,<br/>Timeless Elegance</h1>
-<p class="hero-text hero-text-3 font-body text-[18px] md:text-[22px] font-[300] leading-[1.5] text-white/60 max-w-[520px] mb-10 max-md:text-[16px] max-md:max-w-none">Discover the artistry of handcrafted mother of pearl, mosaic glass, and metal luminaires.</p>
-<div class="hero-text hero-text-4 flex flex-wrap gap-4 max-md:flex-col max-md:w-full">
-<a href="#collection" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-white text-[#1d1d1f] font-body text-[15px] font-[500] rounded-full transition-all duration-300 hover:bg-white/90 hover:scale-[1.02] active:scale-[0.98]">Explore Collection</a>
-<a href="about.html" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-transparent text-white/80 font-body text-[15px] font-[500] rounded-full border border-white/20 transition-all duration-300 hover:bg-white/10 hover:border-white/40 hover:text-white active:scale-[0.98]">Learn More</a>
-</div>
-</div>
-</div>
-
-<button class="hero-nav-btn hero-nav-prev" id="hero-prev" aria-label="Previous slide" type="button"><span class="material-symbols-outlined text-[20px]">chevron_left</span></button>
-<button class="hero-nav-btn hero-nav-next" id="hero-next" aria-label="Next slide" type="button"><span class="material-symbols-outlined text-[20px]">chevron_right</span></button>
+<button class="hero-nav-btn hero-nav-prev" id="hero-prev" aria-label="Previous slide" type="button"><span class="material-symbols-outlined text-[24px]">chevron_left</span></button>
+<button class="hero-nav-btn hero-nav-next" id="hero-next" aria-label="Next slide" type="button"><span class="material-symbols-outlined text-[24px]">chevron_right</span></button>
 
 <div class="hero-indicators" role="tablist" aria-label="Slide indicators">
 <button class="hero-ind active" role="tab" aria-selected="true" aria-label="Slide 1" data-index="0" type="button"></button>
 <button class="hero-ind" role="tab" aria-selected="false" aria-label="Slide 2" data-index="1" type="button"></button>
 <button class="hero-ind" role="tab" aria-selected="false" aria-label="Slide 3" data-index="2" type="button"></button>
 <button class="hero-ind" role="tab" aria-selected="false" aria-label="Slide 4" data-index="3" type="button"></button>
+</div>
+
 </div>
 
 </section>
@@ -189,7 +179,19 @@ html { scroll-behavior: smooth; }
 <div class="bg-white p-6 rounded-[18px] border border-hairline/60"><span class="material-symbols-outlined text-[28px] text-accent mb-3">eco</span><h4 class="font-display text-[21px] font-[600] text-ink mb-1">Mother of Pearl</h4><p class="font-body text-[14px] text-ink-dim">Natural iridescent shell inlays and crackle glass.</p></div>
 <div class="bg-white p-6 rounded-[18px] border border-hairline/60"><span class="material-symbols-outlined text-[28px] text-accent mb-3">verified</span><h4 class="font-display text-[21px] font-[600] text-ink mb-1">Artisan Quality</h4><p class="font-body text-[14px] text-ink-dim">Durable construction with timeless aesthetic appeal.</p></div>
 </div>
+
+<div class="hero-content">
+<div class="hero-content-inner">
+<p class="hero-text hero-text-1 font-body text-[14px] md:text-[15px] font-[500] text-white/60 uppercase tracking-[0.15em] mb-4">Handcrafted Luminaires</p>
+<h1 class="hero-text hero-text-2 font-display text-[56px] md:text-[68px] font-[700] leading-[1.05] text-white mb-5 max-md:text-[36px] max-md:leading-[1.1]" style="letter-spacing:-0.03em;">Crafted Light,<br/>Timeless Elegance</h1>
+<p class="hero-text hero-text-3 font-body text-[18px] md:text-[22px] font-[300] leading-[1.5] text-white/60 max-w-[520px] mb-10 max-md:text-[16px] max-md:max-w-none">Discover the artistry of handcrafted mother of pearl, mosaic glass, and metal luminaires.</p>
+<div class="hero-text hero-text-4 flex flex-wrap gap-4 max-md:flex-col max-md:w-full">
+<a href="#collection" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-white text-[#1d1d1f] font-body text-[15px] font-[500] rounded-full transition-all duration-300 hover:bg-white/90 hover:scale-[1.02] active:scale-[0.98]">Explore Collection</a>
+<a href="about.html" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-transparent text-white/80 font-body text-[15px] font-[500] rounded-full border border-white/20 transition-all duration-300 hover:bg-white/10 hover:border-white/40 hover:text-white active:scale-[0.98]">Learn More</a>
 </div>
+</div>
+</div>
+
 </section>
 
 <section class="w-full py-24 px-6" style="background: #272729;">
@@ -244,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
         current: 0,
         total: 4,
         timer: null,
-        imageDuration: 3000,
+        imageDuration: 5000,
         isPaused: false,
         videoEl: null,
         slides: document.querySelectorAll('#hero-slider .hero-slide'),
