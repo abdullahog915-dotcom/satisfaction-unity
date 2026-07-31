@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<base href="/"/>
 <title>Product Details — Satisfaction Unity</title>
 
 <link rel="icon" type="image/png" href="assets/fevicon/favicon-32x32.png?v=2" sizes="32x32" />
@@ -143,10 +144,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('id');
+    const pathMatch = window.location.pathname.match(/^\/products\/([^/]+)\/?$/);
+    let productId = pathMatch ? decodeURIComponent(pathMatch[1]) : urlParams.get('id');
 
-    if (productId && window.location.pathname.endsWith('product-detail.html')) {
-        window.location.replace('/products/' + productId);
+    if (!pathMatch && productId && window.location.pathname.endsWith('product-detail.html')) {
+        window.location.replace('/products/' + encodeURIComponent(productId));
         return;
     }
 
