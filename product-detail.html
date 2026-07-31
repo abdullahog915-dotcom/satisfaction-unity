@@ -147,11 +147,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const pathMatch = window.location.pathname.match(/^\/products\/([^/]+)\/?$/);
     let productId = pathMatch ? decodeURIComponent(pathMatch[1]) : urlParams.get('id');
 
-    if (!pathMatch && productId && window.location.pathname.endsWith('product-detail.html')) {
-        window.location.replace('/products/' + encodeURIComponent(productId));
-        return;
-    }
-
     const container = document.getElementById('product-detail-container');
 
     if (!productId) {
