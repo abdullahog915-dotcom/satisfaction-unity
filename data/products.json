@@ -1,119 +1,94 @@
-[
-  {
-    "id": "lamp-01",
-    "name": "Mother of Pearl Mosaic Table Lamp",
-    "category": "Table Lamps",
-    "price": 1499,
-    "description": "Elevate your home décor with this exquisite handcrafted Mother of Pearl Mosaic Table Lamp, designed to bring timeless elegance to any interior. The rectangular lamp base is meticulously handcrafted using natural mother of pearl discs, accented with a vibrant floral mosaic featuring green and pink leaf motifs. Finished with a premium fabric drum shade, the lamp emits a soft, warm glow that creates a welcoming ambiance.\n\nPerfect for living rooms, bedrooms, hotels, offices, and luxury interiors, this statement table lamp seamlessly blends modern aesthetics with artisan craftsmanship. Whether placed on a bedside table, console, or side table, it adds sophistication and style to any space.\n\nKey Features:\n\nHandcrafted premium Mother of Pearl mosaic base\nElegant floral leaf inlay design\nHigh-quality linen fabric drum shade\nWarm ambient lighting for a cozy atmosphere\nSuitable for bedside tables, living rooms, offices, hotels, and luxury interiors\nDurable construction with a timeless contemporary design\nAn ideal gift for housewarmings, weddings, and festive occasions",
-    "images": [
-      "assets/products/lamp-01-1.png",
-      "assets/products/lamp-01-2.png"
-    ],
-    "material": "metal",
-    "inStock": true
-  },
-  {
-    "id": "lamp-02",
-    "name": "Handcrafted Mosaic Glass Table Lamp",
-    "category": "Table Lamps",
-    "price": 8500,
-    "description": "Add elegance and warmth to your home with this Handcrafted Mosaic Glass Table Lamp. Featuring a beautifully handcrafted mosaic glass base in neutral ivory, silver, and gold tones, this lamp complements both modern and classic interiors. The premium fabric drum shade provides a soft, warm glow, creating a cozy and inviting atmosphere.\n\nIdeal for bedside tables, console tables, living rooms, bedrooms, hotels, and offices, this decorative lamp combines artisan craftsmanship with timeless style, making it a perfect accent piece for any space.\n\nKey Features:\n\nHandcrafted mosaic glass base with a premium finish\nElegant ivory, silver, and gold mosaic design\nHigh-quality fabric drum shade\nSoft ambient lighting for a warm atmosphere\nPerfect for bedrooms, living rooms, offices, hotels, and entryways\nDurable construction with a luxurious appearance\nIdeal for home décor, gifting, and interior styling",
-    "images": [
-      "assets/products/lamp-02-1.png",
-      "assets/products/lamp-02-2.png"
-    ],
-    "material": "metal",
-    "inStock": true
-  },
-  {
-    "id": "lamp-03",
-    "name": "Handcrafted Crackle Mosaic Glass Table Lamp",
-    "category": "Table Lamps",
-    "price": 9999,
-    "description": "Bring artistic elegance to your home with this Handcrafted Crackle Mosaic Glass Table Lamp. Featuring a stunning vase-shaped base adorned with multicolour crackle mosaic glass in rich blue, purple, teal, gold, and black tones, this lamp is a true statement piece. The brushed gold metal accents and premium linen drum shade complement the vibrant mosaic, creating a luxurious and contemporary look.\n\nDesigned to provide a soft, warm glow, this decorative table lamp is perfect for bedrooms, living rooms, offices, hotels, and entryways. Its handcrafted design makes each piece unique, adding charm and sophistication to any décor.\n\nKey Features:\n\nHandcrafted multicolour crackle mosaic glass base\nElegant brushed gold metal accents\nPremium linen drum shade for warm ambient lighting\nUnique artisan craftsmanship\nIdeal for bedside tables, living rooms, offices, hotels, and console tables\nDurable construction with a timeless decorative appeal\nPerfect for home décor, gifting, and luxury interiors",
-    "images": [
-      "assets/products/lamp-03-1.png",
-      "assets/products/lamp-03-2.png"
-    ],
-    "material": "metal",
-    "inStock": true
-  },
-  {
-    "id": "lamp-04",
-    "name": "Handcrafted Black Mosaic Table Lamp",
-    "category": "Table Lamps",
-    "price": 5880,
-    "description": "Enhance your interiors with this Handcrafted Black Mosaic Table Lamp, featuring a striking triple-sphere design finished with premium black, silver, and grey mosaic glass tiles. The sleek matte black metal frame and elegant fabric drum shade create a sophisticated contemporary look while providing a warm, inviting glow.\n\nPerfect for modern living rooms, bedrooms, offices, hotels, and luxury interiors, this decorative lamp serves as both a functional lighting solution and a stylish accent piece. Its handcrafted mosaic detailing and timeless design make it an eye-catching addition to any décor.\n\nKey Features:\n\nHandcrafted black mosaic glass sphere design\nTriple-sphere contemporary silhouette\nMatte black metal base and hardware\nPremium fabric drum shade for soft ambient lighting\nIdeal for bedside tables, living rooms, offices, hotels, and entryways\nDurable construction with artisan craftsmanship\nPerfect for modern, contemporary, and luxury home décor",
-    "images": [
-      "assets/products/lamp-04-1.png",
-      "assets/products/lamp-04-2.png"
-    ],
-    "material": "metal",
-    "inStock": true
-  },
-  {
-    "id": "lamp-05",
-    "name": "Handcrafted Black Mosaic Double Sphere Table Lamp",
-    "category": "Table Lamps",
-    "price": 4000,
-    "description": "Bring modern elegance to your space with this Handcrafted Black Mosaic Double Sphere Table Lamp. Designed with two beautifully handcrafted mosaic glass spheres in black and charcoal tones, this lamp offers a sophisticated blend of contemporary style and artisan craftsmanship. The brushed gold metal base and accents create a striking contrast, while the premium linen drum shade diffuses a soft, warm light to enhance any room.\n\nIdeal for bedside tables, living rooms, offices, hotels, and reading nooks, this decorative table lamp serves as both a functional lighting solution and a stylish statement piece. Its timeless design complements modern, industrial, transitional, and luxury interiors.\n\nKey Features:\n\nHandcrafted black mosaic glass double-sphere design\nPremium brushed gold metal base and accents\nHigh-quality linen fabric drum shade\nSoft, warm ambient lighting\nPerfect for bedrooms, living rooms, offices, hotels, and side tables\nDurable construction with artisan craftsmanship\nElegant contemporary design suitable for modern and luxury interiors\nIdeal for home décor, gifting, and interior styling",
-    "images": [
-      "assets/products/lamp-05-1.png",
-      "assets/products/lamp-05-2.png"
-    ],
-    "material": "metal",
-    "inStock": true
-  },
-  {
-    "id": "lamp-06",
-    "name": "Handcrafted Gold Mosaic Triple Sphere Table Lamp",
-    "category": "Table Lamps",
-    "price": 2500,
-    "description": "Add a touch of luxury to your interiors with this Handcrafted Gold Mosaic Triple Sphere Table Lamp. Featuring three beautifully handcrafted mosaic glass spheres in radiant gold tones, this elegant lamp is designed to create a sophisticated focal point in any room. The brushed gold metal accents and premium fabric drum shade combine to deliver a timeless look while casting a soft, warm glow.\n\nPerfect for living rooms, bedrooms, hotels, offices, and entryways, this decorative table lamp blends artisan craftsmanship with contemporary elegance. Whether used as a bedside lamp or an accent piece, it enhances any décor with its refined style and premium finish.\n\nKey Features:\n\nHandcrafted gold mosaic glass triple-sphere design\nElegant brushed gold metal base and fittings\nPremium linen fabric drum shade\nSoft ambient lighting for a warm, inviting atmosphere\nIdeal for bedside tables, living rooms, offices, hotels, and console tables\nDurable construction with artisan craftsmanship\nContemporary design that complements modern, classic, and luxury interiors\nPerfect for home décor, gifting, and interior styling",
-    "images": [
-      "assets/products/lamp-06-1.png",
-      "assets/products/lamp-06-2.png"
-    ],
-    "material": "metal",
-    "inStock": true
-  },
-  {
-    "id": "lamp-07",
-    "name": "Handcrafted Gold & Black Mosaic Triple Sphere Table Lamp",
-    "category": "Table Lamps",
-    "price": 8500,
-    "description": "Make a bold statement with this Handcrafted Gold & Black Mosaic Triple Sphere Table Lamp, a perfect blend of luxury and contemporary design. Featuring three handcrafted mosaic glass spheres in an elegant gold and black combination, this lamp brings depth, contrast, and sophistication to any interior. The brushed gold metal base and fittings enhance its premium appeal, while the high-quality linen fabric shade diffuses a soft, warm light for a cozy ambiance.\n\nIdeal for bedside tables, living rooms, offices, hotels, and luxury interiors, this decorative lamp is both a functional lighting solution and an eye-catching décor piece. Its artisan craftsmanship and timeless design make it a stylish addition to modern and classic spaces alike.\n\nKey Features:\n\nHandcrafted gold and black mosaic glass triple-sphere design\nPremium brushed gold metal base and hardware\nHigh-quality linen fabric drum shade\nWarm, soft ambient illumination\nSuitable for bedrooms, living rooms, offices, hotels, and console tables\nDurable handcrafted construction\nContemporary luxury design with a striking two-tone finish\nPerfect for home décor, gifting, and interior styling",
-    "images": [
-      "assets/products/lamp-07-1.jpeg",
-      "assets/products/lamp-07-2.png"
-    ],
-    "material": "metal",
-    "inStock": true
-  },
-  {
-    "id": "lamp-08",
-    "name": "Handcrafted White & Gold Mosaic Flower Vase",
-    "category": "vase",
-    "price": 8777,
-    "description": "Enhance your home décor with this Handcrafted White & Gold Mosaic Flower Vase, featuring a graceful curved silhouette adorned with finely handcrafted mosaic tiles in elegant white, ivory, silver, and gold tones. Designed to complement both fresh and artificial floral arrangements, this decorative vase adds a refined touch to any living space.\n\nWhether displayed on a dining table, console, coffee table, or office desk, this artisan-crafted vase serves as a timeless accent piece. Its neutral colour palette and shimmering mosaic finish blend beautifully with modern, contemporary, classic, and luxury interiors.\n\nKey Features:\n\nHandcrafted white, ivory, silver, and gold mosaic tile design\nElegant curved vase silhouette with a premium finish\nSuitable for fresh, dried, or artificial flowers\nIdeal for living rooms, dining rooms, bedrooms, offices, hotels, and reception areas\nDurable handcrafted construction with artisan detailing\nStylish centrepiece for tables, shelves, and consoles\nComplements modern, contemporary, and luxury home décor\nPerfect for home decoration, gifting, weddings, and festive occasions",
-    "images": [
-      "assets/products/lamp-08-1.png",
-      "assets/products/lamp-08-2.png"
-    ],
-    "material": "metal",
-    "inStock": true
-  },
-  {
-    "id": "lamp-09",
-    "name": "Handcrafted Multicolour Crackle Mosaic Flower Vase",
-    "category": "vase",
-    "price": 7890,
-    "description": "Add artistic charm to your décor with this Handcrafted Multicolour Crackle Mosaic Flower Vase. Featuring a beautifully curved silhouette, this decorative vase is handcrafted with an eye-catching crackle mosaic finish in rich shades of blue, purple, teal, black, and iridescent tones. Its shimmering surface reflects light beautifully, making it a stunning centrepiece for any room.\n\nPerfect for displaying fresh flowers, dried arrangements, or artificial blooms, this artisan vase complements modern, contemporary, and luxury interiors. Whether placed on a dining table, console, coffee table, office desk, or entryway, it adds elegance and colour to your living space.\n\nKey Features:\nHandcrafted multicolour crackle mosaic finish\nElegant curved vase with a premium artisan design\nSuitable for fresh, dried, or artificial flower arrangements\nReflective mosaic surface creates a beautiful light effect\nIdeal for living rooms, bedrooms, dining rooms, offices, hotels, and reception areas\nDurable handcrafted construction\nComplements modern, contemporary, and luxury home décor\nPerfect for home decoration, gifting, weddings, anniversaries, and festive occasions",
-    "images": [
-      "assets/products/lamp-09-1.png",
-      "assets/products/lamp-09-2.jpeg"
-    ],
-    "material": "metal",
-    "inStock": true
-  }
-]
+{
+  "products": [
+    {
+      "id": "lamp-01",
+      "name": "Mother of Pearl Mosaic Table Lamp",
+      "category": "Table Lamps",
+      "price": 1499,
+      "description": "Elevate your home décor with this exquisite handcrafted Mother of Pearl Mosaic Table Lamp, designed to bring timeless elegance to any interior. The rectangular lamp base is meticulously handcrafted using natural mother of pearl discs, accented with a vibrant floral mosaic featuring green and pink leaf motifs. Finished with a premium fabric drum shade, the lamp emits a soft, warm glow that creates a welcoming ambiance.\n\nPerfect for living rooms, bedrooms, hotels, offices, and luxury interiors, this statement table lamp seamlessly blends modern aesthetics with artisan craftsmanship. Whether placed on a bedside table, console, or side table, it adds sophistication and style to any space.\n\nKey Features:\n\nHandcrafted premium Mother of Pearl mosaic base\nElegant floral leaf inlay design\nHigh-quality linen fabric drum shade\nWarm ambient lighting for a cozy atmosphere\nSuitable for bedside tables, living rooms, offices, hotels, and luxury interiors\nDurable construction with a timeless contemporary design\nAn ideal gift for housewarmings, weddings, and festive occasions",
+      "images": ["assets/products/lamp-01-1.png", "assets/products/lamp-01-2.png"],
+      "material": "metal",
+      "inStock": true
+    },
+    {
+      "id": "lamp-02",
+      "name": "Handcrafted Mosaic Glass Table Lamp",
+      "category": "Table Lamps",
+      "price": 8500,
+      "description": "Add elegance and warmth to your home with this Handcrafted Mosaic Glass Table Lamp. Featuring a beautifully handcrafted mosaic glass base in neutral ivory, silver, and gold tones, this lamp complements both modern and classic interiors. The premium fabric drum shade provides a soft, warm glow, creating a cozy and inviting atmosphere.\n\nIdeal for bedside tables, console tables, living rooms, bedrooms, hotels, and offices, this decorative lamp combines artisan craftsmanship with timeless style, making it a perfect accent piece for any space.\n\nKey Features:\n\nHandcrafted mosaic glass base with a premium finish\nElegant ivory, silver, and gold mosaic design\nHigh-quality fabric drum shade\nSoft ambient lighting for a warm atmosphere\nPerfect for bedrooms, living rooms, offices, hotels, and entryways\nDurable construction with a luxurious appearance\nIdeal for home décor, gifting, and interior styling",
+      "images": ["assets/products/lamp-02-1.png", "assets/products/lamp-02-2.png"],
+      "material": "metal",
+      "inStock": true
+    },
+    {
+      "id": "lamp-03",
+      "name": "Handcrafted Crackle Mosaic Glass Table Lamp",
+      "category": "Table Lamps",
+      "price": 9999,
+      "description": "Bring artistic elegance to your home with this Handcrafted Crackle Mosaic Glass Table Lamp. Featuring a stunning vase-shaped base adorned with multicolour crackle mosaic glass in rich blue, purple, teal, gold, and black tones, this lamp is a true statement piece. The brushed gold metal accents and premium linen drum shade complement the vibrant mosaic, creating a luxurious and contemporary look.\n\nDesigned to provide a soft, warm glow, this decorative table lamp is perfect for bedrooms, living rooms, offices, hotels, and entryways. Its handcrafted design makes each piece unique, adding charm and sophistication to any décor.\n\nKey Features:\n\nHandcrafted multicolour crackle mosaic glass base\nElegant brushed gold metal accents\nPremium linen drum shade for warm ambient lighting\nUnique artisan craftsmanship\nIdeal for bedside tables, living rooms, offices, hotels, and console tables\nDurable construction with a timeless decorative appeal\nPerfect for home décor, gifting, and luxury interiors",
+      "images": ["assets/products/lamp-03-1.png", "assets/products/lamp-03-2.png"],
+      "material": "metal",
+      "inStock": true
+    },
+    {
+      "id": "lamp-04",
+      "name": "Handcrafted Black Mosaic Table Lamp",
+      "category": "Table Lamps",
+      "price": 5880,
+      "description": "Enhance your interiors with this Handcrafted Black Mosaic Table Lamp, featuring a striking triple-sphere design finished with premium black, silver, and grey mosaic glass tiles. The sleek matte black metal frame and elegant fabric drum shade create a sophisticated contemporary look while providing a warm, inviting glow.\n\nPerfect for modern living rooms, bedrooms, offices, hotels, and luxury interiors, this decorative lamp serves as both a functional lighting solution and a stylish accent piece. Its handcrafted mosaic detailing and timeless design make it an eye-catching addition to any décor.\n\nKey Features:\n\nHandcrafted black mosaic glass sphere design\nTriple-sphere contemporary silhouette\nMatte black metal base and hardware\nPremium fabric drum shade for soft ambient lighting\nIdeal for bedside tables, living rooms, offices, hotels, and entryways\nDurable construction with artisan craftsmanship\nPerfect for modern, contemporary, and luxury home décor",
+      "images": ["assets/products/lamp-04-1.png", "assets/products/lamp-04-2.png"],
+      "material": "metal",
+      "inStock": true
+    },
+    {
+      "id": "lamp-05",
+      "name": "Handcrafted Black Mosaic Double Sphere Table Lamp",
+      "category": "Table Lamps",
+      "price": 4000,
+      "description": "Bring modern elegance to your space with this Handcrafted Black Mosaic Double Sphere Table Lamp. Designed with two beautifully handcrafted mosaic glass spheres in black and charcoal tones, this lamp offers a sophisticated blend of contemporary style and artisan craftsmanship. The brushed gold metal base and accents create a striking contrast, while the premium linen drum shade diffuses a soft, warm light to enhance any room.\n\nIdeal for bedside tables, living rooms, offices, hotels, and reading nooks, this decorative table lamp serves as both a functional lighting solution and a stylish statement piece. Its timeless design complements modern, industrial, transitional, and luxury interiors.\n\nKey Features:\n\nHandcrafted black mosaic glass double-sphere design\nPremium brushed gold metal base and accents\nHigh-quality linen fabric drum shade\nSoft, warm ambient lighting\nPerfect for bedrooms, living rooms, offices, hotels, and side tables\nDurable construction with artisan craftsmanship\nElegant contemporary design suitable for modern and luxury interiors\nIdeal for home décor, gifting, and interior styling",
+      "images": ["assets/products/lamp-05-1.png", "assets/products/lamp-05-2.png"],
+      "material": "metal",
+      "inStock": true
+    },
+    {
+      "id": "lamp-06",
+      "name": "Handcrafted Gold Mosaic Triple Sphere Table Lamp",
+      "category": "Table Lamps",
+      "price": 2500,
+      "description": "Add a touch of luxury to your interiors with this Handcrafted Gold Mosaic Triple Sphere Table Lamp. Featuring three beautifully handcrafted mosaic glass spheres in radiant gold tones, this elegant lamp is designed to create a sophisticated focal point in any room. The brushed gold metal accents and premium fabric drum shade combine to deliver a timeless look while casting a soft, warm glow.\n\nPerfect for living rooms, bedrooms, hotels, offices, and entryways, this decorative table lamp blends artisan craftsmanship with contemporary elegance. Whether used as a bedside lamp or an accent piece, it enhances any décor with its refined style and premium finish.\n\nKey Features:\n\nHandcrafted gold mosaic glass triple-sphere design\nElegant brushed gold metal base and fittings\nPremium linen fabric drum shade\nSoft ambient lighting for a warm, inviting atmosphere\nIdeal for bedside tables, living rooms, offices, hotels, and console tables\nDurable construction with artisan craftsmanship\nContemporary design that complements modern, classic, and luxury interiors\nPerfect for home décor, gifting, and interior styling",
+      "images": ["assets/products/lamp-06-1.png", "assets/products/lamp-06-2.png"],
+      "material": "metal",
+      "inStock": true
+    },
+    {
+      "id": "lamp-07",
+      "name": "Handcrafted Gold & Black Mosaic Triple Sphere Table Lamp",
+      "category": "Table Lamps",
+      "price": 8500,
+      "description": "Make a bold statement with this Handcrafted Gold & Black Mosaic Triple Sphere Table Lamp, a perfect blend of luxury and contemporary design. Featuring three handcrafted mosaic glass spheres in an elegant gold and black combination, this lamp brings depth, contrast, and sophistication to any interior. The brushed gold metal base and fittings enhance its premium appeal, while the high-quality linen fabric shade diffuses a soft, warm light for a cozy ambiance.\n\nIdeal for bedside tables, living rooms, offices, hotels, and luxury interiors, this decorative lamp is both a functional lighting solution and an eye-catching décor piece. Its artisan craftsmanship and timeless design make it a stylish addition to modern and classic spaces alike.\n\nKey Features:\n\nHandcrafted gold and black mosaic glass triple-sphere design\nPremium brushed gold metal base and hardware\nHigh-quality linen fabric drum shade\nWarm, soft ambient illumination\nSuitable for bedrooms, living rooms, offices, hotels, and console tables\nDurable handcrafted construction\nContemporary luxury design with a striking two-tone finish\nPerfect for home décor, gifting, and interior styling",
+      "images": ["assets/products/lamp-07-1.jpeg", "assets/products/lamp-07-2.png"],
+      "material": "metal",
+      "inStock": true
+    },
+    {
+      "id": "lamp-08",
+      "name": "Handcrafted White & Gold Mosaic Flower Vase",
+      "category": "vase",
+      "price": 8777,
+      "description": "Enhance your home décor with this Handcrafted White & Gold Mosaic Flower Vase, featuring a graceful curved silhouette adorned with finely handcrafted mosaic tiles in elegant white, ivory, silver, and gold tones. Designed to complement both fresh and artificial floral arrangements, this decorative vase adds a refined touch to any living space.\n\nWhether displayed on a dining table, console, coffee table, or office desk, this artisan-crafted vase serves as a timeless accent piece. Its neutral colour palette and shimmering mosaic finish blend beautifully with modern, contemporary, classic, and luxury interiors.\n\nKey Features:\n\nHandcrafted white, ivory, silver, and gold mosaic tile design\nElegant curved vase silhouette with a premium finish\nSuitable for fresh, dried, or artificial flowers\nIdeal for living rooms, dining rooms, bedrooms, offices, hotels, and reception areas\nDurable handcrafted construction with artisan detailing\nStylish centrepiece for tables, shelves, and consoles\nComplements modern, contemporary, and luxury home décor\nPerfect for home decoration, gifting, weddings, and festive occasions",
+      "images": ["assets/products/lamp-08-1.png", "assets/products/lamp-08-2.png"],
+      "material": "metal",
+      "inStock": true
+    },
+    {
+      "id": "lamp-09",
+      "name": "Handcrafted Multicolour Crackle Mosaic Flower Vase",
+      "category": "vase",
+      "price": 7890,
+      "description": "Add artistic charm to your décor with this Handcrafted Multicolour Crackle Mosaic Flower Vase. Featuring a beautifully curved silhouette, this decorative vase is handcrafted with an eye-catching crackle mosaic finish in rich shades of blue, purple, teal, black, and iridescent tones. Its shimmering surface reflects light beautifully, making it a stunning centrepiece for any room.\n\nPerfect for displaying fresh flowers, dried arrangements, or artificial blooms, this artisan vase complements modern, contemporary, and luxury interiors. Whether placed on a dining table, console, coffee table, office desk, or entryway, it adds elegance and colour to your living space.\n\nKey Features:\nHandcrafted multicolour crackle mosaic finish\nElegant curved vase with a premium artisan design\nSuitable for fresh, dried, or artificial flower arrangements\nReflective mosaic surface creates a beautiful light effect\nIdeal for living rooms, bedrooms, dining rooms, offices, hotels, and reception areas\nDurable handcrafted construction\nComplements modern, contemporary, and luxury home décor\nPerfect for home decoration, gifting, weddings, anniversaries, and festive occasions",
+      "images": ["assets/products/lamp-09-1.png", "assets/products/lamp-09-2.jpeg"],
+      "material": "metal",
+      "inStock": true
+    }
+  ]
+}
