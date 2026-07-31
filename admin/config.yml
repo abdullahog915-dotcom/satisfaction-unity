@@ -9,128 +9,142 @@ media_folder: "assets/products"
 public_folder: "/assets/products"
 
 publish_mode: simple
-locale: en
+locale: "en"
 
 collections:
 
-  # PRODUCTS
-  - name: products
-    label: Products
+  # ---------------------------------------------------------
+  # PRODUCTS — matches your EXISTING data/products.json format
+  # + SEO fields added (meta title, meta description, image alt text)
+  # ---------------------------------------------------------
+  - name: "products"
+    label: "Products"
     files:
-      - file: data/products.json
-        label: Product Catalog
-        name: products
+      - file: "data/products.json"
+        label: "Product Catalog"
+        name: "products"
         fields:
-          - label: Products
-            name: products
-            widget: list
-            summary: "{{fields.name}}"
+          - label: "Products"
+            name: "products"
+            widget: "list"
+            summary: "{{fields.name}} — {{fields.category}}"
             fields:
-
-              - label: ID
-                name: id
-                widget: string
-
-              - label: Product Name
-                name: name
-                widget: string
-
-              - label: Category
-                name: category
-                widget: select
-                options:
-                  - Table Lamps
-                  - vase
-
-              - label: Price (INR)
-                name: price
-                widget: number
-                value_type: int
-
-              - label: Description
-                name: description
-                widget: text
-
-              - label: Images
-                name: images
-                widget: list
+              - {label: "ID (unique, no spaces)", name: "id", widget: "string", hint: "e.g. lamp-10 — must be unique, used internally"}
+              - {label: "Product Name", name: "name", widget: "string"}
+              - {label: "Category", name: "category", widget: "select", options: ["Table Lamps", "vase", "Brass", "Aluminium", "Iron", "Other"]}
+              - {label: "Price (INR)", name: "price", widget: "number", value_type: "int"}
+              - {label: "Description", name: "description", widget: "text"}
+              - label: "Images"
+                name: "images"
+                widget: "list"
                 field:
-                  label: Image
-                  name: image
-                  widget: image
+                  label: "Image"
+                  name: "image"
+                  widget: "image"
+              - {label: "Material", name: "material", widget: "select", options: ["metal", "brass", "aluminium", "iron", "glass", "ceramic"], default: "metal"}
+              - {label: "In Stock", name: "inStock", widget: "boolean", default: true}
 
-              - label: Material
-                name: material
-                widget: select
-                options:
-                  - metal
-                  - brass
-                  - aluminium
-                  - iron
-                  - glass
-                  - ceramic
+              # ---------------- SEO fields ----------------
+              - label: "SEO"
+                name: "seo"
+                widget: "object"
+                collapsed: true
+                required: false
+                fields:
+                  - {label: "Meta Title (50–60 characters)", name: "metaTitle", widget: "string", required: false, hint: "e.g. Handcrafted Mosaic Glass Table Lamp | Satisfaction Unity"}
+                  - {label: "Meta Description (150–160 characters)", name: "metaDescription", widget: "text", required: false, hint: "Shown in Google search results below the title"}
+                  - {label: "Image Alt Text", name: "imageAlt", widget: "string", required: false, hint: "Describe the product image for Google Images & accessibility, e.g. 'Handcrafted mosaic glass table lamp with linen drum shade'"}
 
-              - label: In Stock
-                name: inStock
-                widget: boolean
-                default: true
-
-  # HOMEPAGE BANNER
-  - name: banner
-    label: Homepage Banner
+  # ---------------------------------------------------------
+  # HERO BANNER SLIDES — edit the homepage slider images/video
+  # ---------------------------------------------------------
+  - name: "banner"
+    label: "Homepage Banner"
     files:
-      - file: data/banner.json
-        label: Banner Slides
-        name: banner
+      - file: "data/banner.json"
+        label: "Banner Slides"
+        name: "banner"
         fields:
-          - label: Slides
-            name: slides
-            widget: list
+          - label: "Slides"
+            name: "slides"
+            widget: "list"
             summary: "{{fields.type}}"
             fields:
+              - {label: "Type", name: "type", widget: "select", options: ["image", "video"]}
+              - {label: "Image (if type = image)", name: "image", widget: "image", required: false}
+              - {label: "Video file (if type = video, upload .mp4)", name: "video", widget: "file", required: false}
 
-              - label: Type
-                name: type
-                widget: select
-                options:
-                  - image
-                  - video
-
-              - label: Image
-                name: image
-                widget: image
-                required: false
-
-              - label: Video
-                name: video
-                widget: file
-                required: false
-
-  # SITE SETTINGS
-  - name: settings
-    label: Site Settings
+  # ---------------------------------------------------------
+  # SITE SETTINGS — contact info, address, phone, etc.
+  # ---------------------------------------------------------
+  - name: "settings"
+    label: "Site Settings"
     files:
-      - file: data/settings.json
-        label: General Settings
-        name: settings
+      - file: "data/settings.json"
+        label: "General Settings"
+        name: "settings"
         fields:
+          - {label: "Business Name", name: "businessName", widget: "string"}
+          - {label: "Address", name: "address", widget: "text"}
+          - {label: "Phone", name: "phone", widget: "string"}
+          - {label: "WhatsApp Number", name: "whatsapp", widget: "string"}
+          - {label: "Email", name: "email", widget: "string"}
 
-          - label: Business Name
-            name: businessName
-            widget: string
+  # ---------------------------------------------------------
+  # SITE-WIDE SEO — homepage meta tags, social share image,
+  # Google verification, and schema.org business info
+  # ---------------------------------------------------------
+  - name: "seo"
+    label: "SEO Settings"
+    files:
+      - file: "data/seo.json"
+        label: "Global SEO"
+        name: "seo"
+        fields:
+          - label: "Homepage"
+            name: "home"
+            widget: "object"
+            fields:
+              - {label: "Meta Title", name: "metaTitle", widget: "string", hint: "50–60 characters, e.g. Handcrafted Brass & Mosaic Lamps | Satisfaction Unity"}
+              - {label: "Meta Description", name: "metaDescription", widget: "text", hint: "150–160 characters"}
 
-          - label: Address
-            name: address
-            widget: text
+          - label: "Collection Page"
+            name: "products"
+            widget: "object"
+            fields:
+              - {label: "Meta Title", name: "metaTitle", widget: "string"}
+              - {label: "Meta Description", name: "metaDescription", widget: "text"}
 
-          - label: Phone
-            name: phone
-            widget: string
+          - label: "About Page"
+            name: "about"
+            widget: "object"
+            fields:
+              - {label: "Meta Title", name: "metaTitle", widget: "string"}
+              - {label: "Meta Description", name: "metaDescription", widget: "text"}
 
-          - label: WhatsApp Number
-            name: whatsapp
-            widget: string
+          - label: "Contact Page"
+            name: "contact"
+            widget: "object"
+            fields:
+              - {label: "Meta Title", name: "metaTitle", widget: "string"}
+              - {label: "Meta Description", name: "metaDescription", widget: "text"}
 
-          - label: Email
-            name: email
-            widget: string
+          - label: "Social Share Image (og:image)"
+            name: "ogImage"
+            widget: "image"
+            required: false
+            hint: "Shown when the site is shared on WhatsApp, Facebook, etc. Recommended 1200x630px"
+
+          - label: "Google Site Verification Code"
+            name: "googleVerification"
+            widget: "string"
+            required: false
+            hint: "From Google Search Console, only the code value (not the full meta tag)"
+
+          - label: "Business Schema (for Google rich results)"
+            name: "schema"
+            widget: "object"
+            fields:
+              - {label: "Business Type", name: "type", widget: "select", options: ["Store", "HomeGoodsStore", "Manufacturer", "LocalBusiness"], default: "HomeGoodsStore"}
+              - {label: "Business Name", name: "name", widget: "string", default: "Satisfaction Unity"}
+              - {label: "Logo Image", name: "logo", widget: "image", required: false}
