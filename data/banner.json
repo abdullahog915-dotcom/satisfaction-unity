@@ -1,0 +1,20 @@
+{
+  "slides": [
+    {
+      "type": "video",
+      "video": "/assets/banner-1.mp4"
+    },
+    {
+      "type": "image",
+      "image": "/assets/slider/banner-2.webp"
+    },
+    {
+      "type": "image",
+      "image": "/assets/slider/banner-3.webp"
+    },
+    {
+      "type": "image",
+      "image": "/assets/slider/banner-4.webp"
+    }
+  ]
+}
