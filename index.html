@@ -48,22 +48,54 @@ html { scroll-behavior: smooth; }
 .product-img-primary, .product-img-secondary { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; padding: 24px; }
 .product-img-primary { z-index: 1; }
 .product-img-secondary { z-index: 2; opacity: 0; transition: opacity 0.4s ease; }
-.hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.8s ease-in-out; z-index: 0; pointer-events: none; }
-.hero-slide.active { opacity: 1; z-index: 1; pointer-events: auto; }
-.hero-btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.7); backdrop-filter: blur(4px); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #1d1d1f; transition: background 0.2s, transform 0.2s; opacity: 0; }
-.hero-section:hover .hero-btn { opacity: 1; }
-.hero-btn:hover { background: rgba(255,255,255,0.95); transform: translateY(-50%) scale(1.05); }
-.hero-btn:focus-visible { outline: 2px solid #0066cc; outline-offset: 2px; opacity: 1; }
-.hero-btn-prev { left: 16px; }
-.hero-btn-next { right: 16px; }
-.hero-dot { width: 10px; height: 10px; border-radius: 50%; border: none; background: rgba(255,255,255,0.4); cursor: pointer; transition: background 0.3s, transform 0.2s; padding: 0; }
-.hero-dot.active { background: #fff; transform: scale(1.25); }
-.hero-dot:focus-visible { outline: 2px solid #0066cc; outline-offset: 2px; }
+
+.hero-section { position: relative; width: 100%; height: 100vh; overflow: hidden; background: #000; }
+.hero-slide { position: absolute; inset: 0; z-index: 0; opacity: 0; transition: opacity 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.hero-slide.active { opacity: 1; z-index: 1; }
+.hero-slide-media { position: absolute; inset: -5%; width: 110%; height: 110%; object-fit: cover; transform: scale(1); transition: transform 6s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.hero-slide.active .hero-slide-media { transform: scale(1.05); }
+.hero-slide video.hero-slide-media { object-fit: cover; }
+.hero-overlay { position: absolute; inset: 0; z-index: 2; background: linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.2) 100%); pointer-events: none; }
+
+.hero-content { position: absolute; z-index: 3; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; padding-top: 90px; padding-left: 80px; padding-right: 80px; max-width: 700px; }
+.hero-content-inner { position: relative; }
+.hero-text { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.hero-slide.active .hero-text { opacity: 1; transform: translateY(0); }
+.hero-text-1 { transition-delay: 0.15s; }
+.hero-text-2 { transition-delay: 0.35s; }
+.hero-text-3 { transition-delay: 0.55s; }
+.hero-text-4 { transition-delay: 0.75s; }
+
+.hero-nav-btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.08); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); cursor: pointer; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.7); transition: all 0.3s ease; opacity: 0; }
+.hero-section:hover .hero-nav-btn { opacity: 1; }
+.hero-nav-btn:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: #fff; transform: translateY(-50%) scale(1.05); }
+.hero-nav-btn:focus-visible { outline: 2px solid rgba(255,255,255,0.5); outline-offset: 4px; opacity: 1; }
+.hero-nav-prev { left: 24px; }
+.hero-nav-next { right: 24px; }
+
+.hero-indicators { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; align-items: center; gap: 12px; }
+.hero-ind { width: 8px; height: 8px; border-radius: 50%; border: none; background: rgba(255,255,255,0.3); cursor: pointer; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); padding: 0; }
+.hero-ind.active { background: #fff; width: 32px; border-radius: 4px; }
+.hero-ind:focus-visible { outline: 2px solid rgba(255,255,255,0.5); outline-offset: 3px; }
+
+@media (max-width: 1024px) {
+  .hero-content { padding-left: 48px; padding-right: 48px; }
+  .hero-nav-btn { width: 36px; height: 36px; opacity: 1; }
+}
+
 @media (max-width: 768px) {
-  .hero-btn { width: 36px; height: 36px; opacity: 1; }
-  .hero-btn-prev { left: 8px; }
-  .hero-btn-next { right: 8px; }
-  .hero-slide img, .hero-slide video { object-fit: cover; }
+  .hero-section { height: 100vh; }
+  .hero-content { position: absolute; top: auto; bottom: 0; left: 0; right: 0; justify-content: flex-end; padding: 32px 24px 100px; max-width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%); }
+  .hero-content-inner { text-align: center; }
+  .hero-text { transform: translateY(20px); }
+  .hero-nav-btn { display: none; }
+  .hero-indicators { bottom: 24px; gap: 10px; }
+  .hero-ind { width: 6px; height: 6px; }
+  .hero-ind.active { width: 24px; }
+}
+
+@media (min-width: 1440px) {
+  .hero-content { padding-left: 120px; max-width: 800px; }
 }
 </style>
 </head>
@@ -90,44 +122,47 @@ html { scroll-behavior: smooth; }
 </div>
 
 <main>
-<section class="pt-[44px] hero-section w-full overflow-hidden">
-<div class="relative w-full min-h-[80vh] flex flex-col justify-center items-center text-center px-6 py-24 bg-[#f5f5f7] overflow-hidden">
+<section class="hero-section" aria-label="Hero slideshow">
 
-<div id="hero-slider" class="absolute inset-0 z-0" aria-live="polite" aria-label="Hero slideshow">
-<div class="hero-slide active" data-index="0" aria-hidden="false" role="group" aria-roledescription="slide" aria-label="Slide 1 of 4">
-<video id="hero-video" class="w-full h-full object-cover" autoplay muted playsinline preload="metadata" src="assets/banner-1.mp4" aria-hidden="true"></video>
+<div id="hero-slider" aria-live="polite">
+<div class="hero-slide active" data-index="0" role="group" aria-roledescription="slide" aria-label="Slide 1 of 4">
+<video class="hero-slide-media" autoplay muted playsinline preload="metadata" src="assets/banner-1.mp4" aria-hidden="true"></video>
 </div>
-<div class="hero-slide" data-index="1" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 2 of 4">
-<picture><source srcset="assets/banner-2.webp" type="image/webp"><img src="assets/banner-2.jpg" alt="" class="w-full h-full object-cover" loading="lazy"></picture>
+<div class="hero-slide" data-index="1" role="group" aria-roledescription="slide" aria-label="Slide 2 of 4">
+<picture><source srcset="assets/banner-2.webp" type="image/webp"><img src="assets/banner-2.jpg" alt="" class="hero-slide-media" loading="lazy"></picture>
 </div>
-<div class="hero-slide" data-index="2" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 3 of 4">
-<picture><source srcset="assets/banner-3.webp" type="image/webp"><img src="assets/banner-3.jpg" alt="" class="w-full h-full object-cover" loading="lazy"></picture>
+<div class="hero-slide" data-index="2" role="group" aria-roledescription="slide" aria-label="Slide 3 of 4">
+<picture><source srcset="assets/banner-3.webp" type="image/webp"><img src="assets/banner-3.jpg" alt="" class="hero-slide-media" loading="lazy"></picture>
 </div>
-<div class="hero-slide" data-index="3" aria-hidden="true" role="group" aria-roledescription="slide" aria-label="Slide 4 of 4">
-<picture><source srcset="assets/banner-4.webp" type="image/webp"><img src="assets/banner-4.jpg" alt="" class="w-full h-full object-cover" loading="lazy"></picture>
+<div class="hero-slide" data-index="3" role="group" aria-roledescription="slide" aria-label="Slide 4 of 4">
+<picture><source srcset="assets/banner-4.webp" type="image/webp"><img src="assets/banner-4.jpg" alt="" class="hero-slide-media" loading="lazy"></picture>
 </div>
-</div>
-
-<div class="absolute inset-0 z-[2]" style="background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.15) 100%); pointer-events:none;"></div>
-
-<button class="hero-btn hero-btn-prev" id="hero-prev" aria-label="Previous slide" type="button"><span class="material-symbols-outlined text-[22px]">chevron_left</span></button>
-<button class="hero-btn hero-btn-next" id="hero-next" aria-label="Next slide" type="button"><span class="material-symbols-outlined text-[22px]">chevron_right</span></button>
-
-<div class="relative z-[3] max-w-[980px] mx-auto" style="text-shadow: 0 1px 4px rgba(0,0,0,0.06);">
-<p class="font-body text-[18px] text-ink-muted mb-3 font-[600]">Handcrafted Luminaires</p>
-<h1 class="font-display text-[56px] md:text-[56px] font-[600] leading-[1.07] tracking-[-0.28px] text-ink mb-4 max-md:text-[40px] max-sm:text-[34px]">Crafted Light, Timeless Elegance</h1>
-<p class="font-body text-[24px] md:text-[28px] font-[300] leading-[1.5] text-ink-muted max-w-[680px] mx-auto mb-10 max-md:text-[20px]">Discover the artistry of handcrafted mother of pearl, mosaic glass, and metal luminaires.</p>
-<div class="flex gap-4 justify-center flex-wrap"><a href="#collection" class="btn-primary">Explore Collection</a><a href="about.html" class="btn-primary" style="background:transparent;color:#0066cc;border:1px solid #0066cc">Learn More</a></div>
 </div>
 
-<div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-[3] flex gap-2" id="hero-dots" role="tablist" aria-label="Slide indicators">
-<button class="hero-dot active" role="tab" aria-selected="true" aria-label="Slide 1" data-index="0" type="button"></button>
-<button class="hero-dot" role="tab" aria-selected="false" aria-label="Slide 2" data-index="1" type="button"></button>
-<button class="hero-dot" role="tab" aria-selected="false" aria-label="Slide 3" data-index="2" type="button"></button>
-<button class="hero-dot" role="tab" aria-selected="false" aria-label="Slide 4" data-index="3" type="button"></button>
+<div class="hero-overlay"></div>
+
+<div class="hero-content">
+<div class="hero-content-inner">
+<p class="hero-text hero-text-1 font-body text-[14px] md:text-[15px] font-[500] text-white/60 uppercase tracking-[0.15em] mb-4">Handcrafted Luminaires</p>
+<h1 class="hero-text hero-text-2 font-display text-[56px] md:text-[68px] font-[700] leading-[1.05] text-white mb-5 max-md:text-[36px] max-md:leading-[1.1]" style="letter-spacing:-0.03em;">Crafted Light,<br/>Timeless Elegance</h1>
+<p class="hero-text hero-text-3 font-body text-[18px] md:text-[22px] font-[300] leading-[1.5] text-white/60 max-w-[520px] mb-10 max-md:text-[16px] max-md:max-w-none">Discover the artistry of handcrafted mother of pearl, mosaic glass, and metal luminaires.</p>
+<div class="hero-text hero-text-4 flex flex-wrap gap-4 max-md:flex-col max-md:w-full">
+<a href="#collection" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-white text-[#1d1d1f] font-body text-[15px] font-[500] rounded-full transition-all duration-300 hover:bg-white/90 hover:scale-[1.02] active:scale-[0.98]">Explore Collection</a>
+<a href="about.html" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-transparent text-white/80 font-body text-[15px] font-[500] rounded-full border border-white/20 transition-all duration-300 hover:bg-white/10 hover:border-white/40 hover:text-white active:scale-[0.98]">Learn More</a>
+</div>
+</div>
 </div>
 
+<button class="hero-nav-btn hero-nav-prev" id="hero-prev" aria-label="Previous slide" type="button"><span class="material-symbols-outlined text-[20px]">chevron_left</span></button>
+<button class="hero-nav-btn hero-nav-next" id="hero-next" aria-label="Next slide" type="button"><span class="material-symbols-outlined text-[20px]">chevron_right</span></button>
+
+<div class="hero-indicators" role="tablist" aria-label="Slide indicators">
+<button class="hero-ind active" role="tab" aria-selected="true" aria-label="Slide 1" data-index="0" type="button"></button>
+<button class="hero-ind" role="tab" aria-selected="false" aria-label="Slide 2" data-index="1" type="button"></button>
+<button class="hero-ind" role="tab" aria-selected="false" aria-label="Slide 3" data-index="2" type="button"></button>
+<button class="hero-ind" role="tab" aria-selected="false" aria-label="Slide 4" data-index="3" type="button"></button>
 </div>
+
 </section>
 
 <section id="collection" class="w-full py-24 px-6" style="background: #f5f5f7;">
@@ -205,26 +240,34 @@ document.addEventListener('DOMContentLoaded', function() {
         overlay.classList.remove('hidden'); overlay.classList.add('block');
     });
 
-    const slider = {
+    const hero = {
         current: 0,
         total: 4,
         timer: null,
         imageDuration: 3000,
         isPaused: false,
-        videoEl: document.getElementById('hero-video'),
+        videoEl: null,
         slides: document.querySelectorAll('#hero-slider .hero-slide'),
-        dots: document.querySelectorAll('#hero-dots .hero-dot'),
+        dots: document.querySelectorAll('.hero-ind'),
         prevBtn: document.getElementById('hero-prev'),
         nextBtn: document.getElementById('hero-next'),
+        touchStartX: 0,
+
+        getVideo() { return this.slides[0].querySelector('video'); },
 
         goTo(index) {
             if (this.timer) { clearTimeout(this.timer); this.timer = null; }
-            if (this.current === 0 && index !== 0 && this.videoEl && !this.videoEl.paused) {
-                this.videoEl.pause();
-            }
+            const prev = this.current;
+            const video = this.getVideo();
+            if (prev === 0 && index !== 0 && video && !video.paused) { video.pause(); }
             this.slides.forEach((s, i) => {
                 s.classList.toggle('active', i === index);
                 s.setAttribute('aria-hidden', i !== index);
+                const media = s.querySelector('.hero-slide-media');
+                if (media) media.style.transition = 'none';
+                void media?.offsetHeight;
+                if (media) media.style.transition = '';
+                if (i === index) { s.classList.remove('active'); void s.offsetHeight; s.classList.add('active'); }
             });
             this.dots.forEach((d, i) => {
                 d.classList.toggle('active', i === index);
@@ -232,57 +275,64 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             this.current = index;
             if (this.current === 0) {
-                this.videoEl.currentTime = 0;
-                this.videoEl.play().catch(() => {});
+                const v = this.getVideo();
+                if (v) { v.currentTime = 0; v.play().catch(() => {}); }
             } else {
                 this.scheduleAuto();
             }
         },
 
-        next() {
-            const next = (this.current + 1) % this.total;
-            this.goTo(next);
-        },
-
-        prev() {
-            const prev = (this.current - 1 + this.total) % this.total;
-            this.goTo(prev);
-        },
+        next() { this.goTo((this.current + 1) % this.total); },
+        prev() { this.goTo((this.current - 1 + this.total) % this.total); },
 
         scheduleAuto() {
             if (this.timer) { clearTimeout(this.timer); this.timer = null; }
-            if (this.isPaused) return;
-            if (this.current === 0) return;
+            if (this.isPaused || this.current === 0) return;
             this.timer = setTimeout(() => this.next(), this.imageDuration);
         },
 
-        onVideoEnd() {
-            if (this.current === 0) this.next();
-        },
-
+        onVideoEnd() { if (this.current === 0) this.next(); },
         handleVisibility() {
             this.isPaused = document.hidden;
             if (this.isPaused && this.timer) { clearTimeout(this.timer); this.timer = null; }
             if (!this.isPaused && this.current !== 0) this.scheduleAuto();
         },
 
+        handleTouch(e) {
+            if (e.type === 'touchstart') { this.touchStartX = e.changedTouches[0].screenX; return; }
+            if (e.type === 'touchend') {
+                const diff = this.touchStartX - e.changedTouches[0].screenX;
+                if (Math.abs(diff) > 50) { if (diff > 0) this.next(); else this.prev(); }
+            }
+        },
+
+        preloadNext() {
+            const nextIdx = (this.current + 1) % this.total;
+            if (nextIdx === 0) return;
+            const nextSlide = this.slides[nextIdx];
+            const img = nextSlide?.querySelector('img');
+            if (img && !img.complete) { const link = document.createElement('link'); link.rel = 'preload'; link.as = 'image'; link.href = img.src; document.head.appendChild(link); }
+        },
+
         init() {
             const self = this;
-            if (this.videoEl) this.videoEl.addEventListener('ended', () => self.onVideoEnd());
+            this.videoEl = this.getVideo();
+            if (this.videoEl) { this.videoEl.addEventListener('ended', () => self.onVideoEnd()); }
             if (this.nextBtn) this.nextBtn.addEventListener('click', () => self.next());
             if (this.prevBtn) this.prevBtn.addEventListener('click', () => self.prev());
-            this.dots.forEach(dot => {
-                dot.addEventListener('click', () => self.goTo(parseInt(dot.getAttribute('data-index'))));
-            });
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'ArrowRight') { e.preventDefault(); self.next(); }
-                if (e.key === 'ArrowLeft') { e.preventDefault(); self.prev(); }
-            });
+            this.dots.forEach(d => d.addEventListener('click', () => self.goTo(parseInt(d.getAttribute('data-index')))));
+            document.addEventListener('keydown', function(e) { if (e.key === 'ArrowRight') { e.preventDefault(); self.next(); } if (e.key === 'ArrowLeft') { e.preventDefault(); self.prev(); } });
             document.addEventListener('visibilitychange', () => self.handleVisibility());
-            this.slides.forEach((s, i) => s.classList.toggle('active', i === 0));
+            const sliderEl = document.getElementById('hero-slider');
+            if (sliderEl) { sliderEl.addEventListener('touchstart', (e) => self.handleTouch(e), { passive: true }); sliderEl.addEventListener('touchend', (e) => self.handleTouch(e), { passive: true }); }
+            this.slides.forEach((s, i) => {
+                s.classList.toggle('active', i === 0);
+                s.setAttribute('aria-hidden', i !== 0);
+            });
+            this.preloadNext();
         }
     };
-    slider.init();
+    hero.init();
 
     fetch('data/products.json').then(res => res.json()).then(data => {
         const products = Array.isArray(data) ? data : (data.products || []);
