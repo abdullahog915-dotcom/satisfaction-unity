@@ -144,6 +144,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('id');
+
+    if (productId && window.location.pathname.endsWith('product-detail.html')) {
+        window.location.replace('/products/' + productId);
+        return;
+    }
+
     const container = document.getElementById('product-detail-container');
 
     if (!productId) {
