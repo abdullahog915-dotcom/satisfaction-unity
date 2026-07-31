@@ -1,72 +1,136 @@
 backend:
   name: github
   repo: abdullahog915-dotcom/satisfaction-unity
-  branch: main                                 # <-- change to "master" if that's your default branch
+  branch: main
   base_url: https://su-cms-auth.satisfactionunity-in.workers.dev
   auth_endpoint: auth
 
-# Where uploaded images get stored in your repo
-media_folder: "assets/products"          # images save here
-public_folder: "/assets/products"        # and are referenced from here on the live site
+media_folder: "assets/products"
+public_folder: "/assets/products"
 
 publish_mode: simple
-locale: "en"
+locale: en
 
 collections:
 
-  # ---------------------------------------------------------
-  # PRODUCTS — single JSON file holding an array of products.
-  # Your products.html page reads this file with JavaScript
-  # to render the catalog (see products-loader.js).
-  # ---------------------------------------------------------
-  - name: "products"
-    label: "Products"
+  # PRODUCTS
+  - name: products
+    label: Products
     files:
-      - file: "data/products.json"
-        label: "Product Catalog"
-        name: "products"
+      - file: data/products.json
+        label: Product Catalog
+        name: products
         fields:
-          - {label: "Products", name: "items", widget: "list", summary: "{{fields.name}} — {{fields.category}}",
-             fields:
-               - {label: "Product Name", name: "name", widget: "string"}
-               - {label: "SKU / Code", name: "sku", widget: "string", required: false}
-               - {label: "Category", name: "category", widget: "select", options: ["Brass", "Aluminium", "Iron", "Mosaic Glass", "Mother of Pearl", "Ceramic", "Other"]}
-               - {label: "Price (INR)", name: "price", widget: "number", value_type: "float"}
-               - {label: "Short Description", name: "shortDescription", widget: "string"}
-               - {label: "Full Description", name: "description", widget: "markdown"}
-               - {label: "Main Image", name: "image", widget: "image"}
-               - {label: "Additional Images", name: "gallery", widget: "list", field: {label: "Image", name: "img", widget: "image"}, required: false}
-               - {label: "In Stock", name: "inStock", widget: "boolean", default: true}
-               - {label: "Featured (show on homepage)", name: "featured", widget: "boolean", default: false}
+          - label: Products
+            name: products
+            widget: list
+            summary: "{{fields.name}}"
+            fields:
 
-  # ---------------------------------------------------------
-  # HERO BANNER SLIDES — edit the homepage slider images/video
-  # ---------------------------------------------------------
-  - name: "banner"
-    label: "Homepage Banner"
-    files:
-      - file: "data/banner.json"
-        label: "Banner Slides"
-        name: "banner"
-        fields:
-          - {label: "Slides", name: "slides", widget: "list", summary: "{{fields.type}}",
-             fields:
-               - {label: "Type", name: "type", widget: "select", options: ["image", "video"]}
-               - {label: "Image (if type = image)", name: "image", widget: "image", required: false}
-               - {label: "Video file (if type = video, upload .mp4)", name: "video", widget: "file", required: false}
+              - label: ID
+                name: id
+                widget: string
 
-  # ---------------------------------------------------------
-  # SITE SETTINGS — contact info, address, phone, etc.
-  # ---------------------------------------------------------
-  - name: "settings"
-    label: "Site Settings"
+              - label: Product Name
+                name: name
+                widget: string
+
+              - label: Category
+                name: category
+                widget: select
+                options:
+                  - Table Lamps
+                  - vase
+
+              - label: Price (INR)
+                name: price
+                widget: number
+                value_type: int
+
+              - label: Description
+                name: description
+                widget: text
+
+              - label: Images
+                name: images
+                widget: list
+                field:
+                  label: Image
+                  name: image
+                  widget: image
+
+              - label: Material
+                name: material
+                widget: select
+                options:
+                  - metal
+                  - brass
+                  - aluminium
+                  - iron
+                  - glass
+                  - ceramic
+
+              - label: In Stock
+                name: inStock
+                widget: boolean
+                default: true
+
+  # HOMEPAGE BANNER
+  - name: banner
+    label: Homepage Banner
     files:
-      - file: "data/settings.json"
-        label: "General Settings"
-        name: "settings"
+      - file: data/banner.json
+        label: Banner Slides
+        name: banner
         fields:
-          - {label: "Business Name", name: "businessName", widget: "string"}
-          - {label: "Address", name: "address", widget: "text"}
-          - {label: "Phone", name: "phone", widget: "string"}
-          - {label: "WhatsApp Number", name: "whatsapp", widget: "string"}
-          - {label: "Email", name: "email", widget: "string"}
+          - label: Slides
+            name: slides
+            widget: list
+            summary: "{{fields.type}}"
+            fields:
+
+              - label: Type
+                name: type
+                widget: select
+                options:
+                  - image
+                  - video
+
+              - label: Image
+                name: image
+                widget: image
+                required: false
+
+              - label: Video
+                name: video
+                widget: file
+                required: false
+
+  # SITE SETTINGS
+  - name: settings
+    label: Site Settings
+    files:
+      - file: data/settings.json
+        label: General Settings
+        name: settings
+        fields:
+
+          - label: Business Name
+            name: businessName
+            widget: string
+
+          - label: Address
+            name: address
+            widget: text
+
+          - label: Phone
+            name: phone
+            widget: string
+
+          - label: WhatsApp Number
+            name: whatsapp
+            widget: string
+
+          - label: Email
+            name: email
+            widget: string
