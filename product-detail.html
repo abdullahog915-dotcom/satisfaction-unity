@@ -151,10 +151,11 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    fetch('data/products.json')
-    .then(response => response.json())
-    .then(products => {
-        const product = products.find(p => p.id === productId);
+   fetch('data/products.json')
+   .then(response => response.json())
+   .then(data => {
+       const products = Array.isArray(data) ? data : data.products;
+       const product = products.find(p => p.id === productId);
         if (!product) {
             container.innerHTML = '<p class="text-center text-ink-muted py-24">Product not found. <a href="products.html" class="text-accent hover:underline">Browse Collection</a></p>';
             return;
