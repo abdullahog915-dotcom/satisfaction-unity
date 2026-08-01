@@ -63,12 +63,12 @@
     document.head.appendChild(script);
   }
 
-  const path = window.location.pathname;
+  const path = window.location.pathname.replace(/\/+$/, ''); // strip trailing slash
   let pageKey = null;
-  if (path === '/' || path.endsWith('/index.html') || path === '') pageKey = 'home';
-  else if (path.endsWith('/products.html')) pageKey = 'products';
-  else if (path.endsWith('/about.html')) pageKey = 'about';
-  else if (path.endsWith('/contact.html')) pageKey = 'contact';
+  if (path === '' || path === '/' || path === '/index' || path === '/index.html') pageKey = 'home';
+  else if (path === '/products' || path === '/products.html') pageKey = 'products';
+  else if (path === '/about' || path === '/about.html') pageKey = 'about';
+  else if (path === '/contact' || path === '/contact.html') pageKey = 'contact';
 
   if (!pageKey) return;
 
