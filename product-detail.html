@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-   fetch('data/products.json')
+   fetch('data/products.json', { cache: 'no-store' })
    .then(response => response.json())
    .then(data => {
        const products = Array.isArray(data) ? data : data.products;
