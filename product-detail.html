@@ -172,14 +172,18 @@ document.addEventListener('DOMContentLoaded', function() {
             ? '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> In Stock</span>'
             : '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> Out of Stock</span>';
 
-        const whatsappMessage = encodeURIComponent(`I'm interested in ${product.name}`);
+        const productPageUrl = `https://satisfaction-unity.pages.dev/products/${product.id}`;
+        const whatsappMessage = encodeURIComponent(`I'm interested in ${product.name}\n${productPageUrl}`);
         const whatsappUrl = `https://wa.me/919045253529?text=${whatsappMessage}`;
 
         // ---- SEO: per-product title, meta description, OG tags, schema ----
         (function applyProductSEO() {
             const seoTitle = (product.seo && product.seo.metaTitle) || `${product.name} | Satisfaction Unity`;
             const seoDesc = (product.seo && product.seo.metaDescription) || (product.description ? product.description.slice(0, 155) : '');
-            const seoImage = (product.images && product.images[0]) || '';
+            let seoImage = (product.images && product.images[0]) || '';
+            if (seoImage && !/^https?:\/\//i.test(seoImage)) {
+                seoImage = new URL(seoImage, window.location.origin).toString();
+            }
 
             document.title = seoTitle;
 
