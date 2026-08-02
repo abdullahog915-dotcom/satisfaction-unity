@@ -5,57 +5,61 @@
 // BEFORE it reaches the browser or a crawler (WhatsApp, Facebook, etc).
 // This is required because WhatsApp's link-preview bot does NOT run
 // JavaScript, so tags added by client-side JS are invisible to it.
+//
+// SAFETY: everything is wrapped in try/catch. If ANYTHING goes wrong,
+// we fall back to serving the plain product-detail.html page untouched,
+// so the site can never end up blank/broken because of this function.
 
 export async function onRequest(context) {
   const { request, env, params } = context;
-  const productId = params.id;
+  const origin = new URL(request.url).origin;
+  const plainPageUrl = `${origin}/product-detail.html`;
 
-  // 1. Get the base HTML page (product-detail.html) from the deployed assets
-  const baseUrl = new URL('/product-detail.html', request.url);
-  const htmlResponse = await env.ASSETS.fetch(new Request(baseUrl, request));
-  let html = await htmlResponse.text();
+  try {
+    const productId = params.id;
 
-  // 2. Get product data
-  const dataUrl = new URL('/data/products.json', request.url);
-  const dataResponse = await env.ASSETS.fetch(new Request(dataUrl, request));
+    // 1. Get the base HTML page from the deployed static assets
+    const htmlResponse = await env.ASSETS.fetch(plainPageUrl);
+    if (!htmlResponse.ok) {
+      return env.ASSETS.fetch(request);
+    }
+    let html = await htmlResponse.text();
 
-  if (!dataResponse.ok) {
-    // Fallback: just serve the plain page if data fetch fails
-    return new Response(html, {
-      headers: { 'content-type': 'text/html; charset=UTF-8' },
-    });
-  }
+    // 2. Get product data
+    const dataResponse = await env.ASSETS.fetch(`${origin}/data/products.json`);
+    if (!dataResponse.ok) {
+      return new Response(html, {
+        headers: { 'content-type': 'text/html; charset=UTF-8' },
+      });
+    }
 
-  const data = await dataResponse.json();
-  const products = Array.isArray(data) ? data : data.products;
-  const product = products.find((p) => p.id === productId);
+    const data = await dataResponse.json();
+    const products = Array.isArray(data) ? data : data.products;
+    const product = products.find((p) => p.id === productId);
 
-  if (!product) {
-    return new Response(html, {
-      status: 404,
-      headers: { 'content-type': 'text/html; charset=UTF-8' },
-    });
-  }
+    if (!product) {
+      return new Response(html, {
+        headers: { 'content-type': 'text/html; charset=UTF-8' },
+      });
+    }
 
-  // 3. Build the meta tag values
-  const pageUrl = `https://satisfaction-unity.pages.dev/products/${product.id}`;
-  const seoTitle =
-    (product.seo && product.seo.metaTitle) || `${product.name} | Satisfaction Unity`;
-  const seoDesc =
-    (product.seo && product.seo.metaDescription) ||
-    (product.description ? product.description.slice(0, 155) : '');
-  let seoImage = (product.images && product.images[0]) || '';
-  if (seoImage && !/^https?:\/\//i.test(seoImage)) {
-    // Convert relative path (e.g. "assets/products/lamp-02-1.png") to an
-    // absolute URL, since WhatsApp/Facebook require a full URL for previews.
-    seoImage = new URL(seoImage, request.url).toString();
-  }
+    // 3. Build the meta tag values
+    const pageUrl = `${origin}/products/${product.id}`;
+    const seoTitle =
+      (product.seo && product.seo.metaTitle) || `${product.name} | Satisfaction Unity`;
+    const seoDesc =
+      (product.seo && product.seo.metaDescription) ||
+      (product.description ? product.description.slice(0, 155) : '');
 
-  const escape = (str) =>
-    String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    let seoImage = (product.images && product.images[0]) || '';
+    if (seoImage && !/^https?:\/\//i.test(seoImage)) {
+      seoImage = `${origin}/${seoImage.replace(/^\//, '')}`;
+    }
 
-  const metaTags = `
-<title>${escape(seoTitle)}</title>
+    const escape = (str) =>
+      String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+
+    const metaTags = `<title>${escape(seoTitle)}</title>
 <meta name="description" content="${escape(seoDesc)}" />
 <meta property="og:type" content="product" />
 <meta property="og:title" content="${escape(seoTitle)}" />
@@ -68,12 +72,16 @@ ${seoImage ? `<meta property="og:image" content="${escape(seoImage)}" />` : ''}
 ${seoImage ? `<meta name="twitter:image" content="${escape(seoImage)}" />` : ''}
 `;
 
-  // 4. Remove any existing <title> tag from the template and inject our tags
-  //    right before </head>, so they load instantly with the raw HTML.
-  html = html.replace(/<title>.*?<\/title>/i, '');
-  html = html.replace('</head>', `${metaTags}\n</head>`);
+    // 4. Swap the static <title> for ours and inject the rest before </head>
+    if (html.includes('</head>')) {
+      html = html.replace(/<title>[^<]*<\/title>/i, '');
+      html = html.replace('</head>', `${metaTags}</head>`);
+    }
 
-  return new Response(html, {
-    headers: { 'content-type': 'text/html; charset=UTF-8' },
-  });
+    return new Response(html, {
+      headers: { 'content-type': 'text/html; charset=UTF-8' },
+    });
+  } catch (err) {
+    return env.ASSETS.fetch(plainPageUrl);
+  }
 }
