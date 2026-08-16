@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supabase Data Migration Tool</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 20px; background: #f5f5f7; }
+    .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    h1 { font-size: 28px; margin-bottom: 10px; color: #1d1d1f; }
+    .subtitle { color: #7a7a7a; margin-bottom: 30px; }
+    .section { margin-bottom: 30px; padding: 20px; background: #f9f9f9; border-radius: 8px; }
+    .section-title { font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #333; }
+    button { background: #0066cc; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; margin-right: 10px; margin-bottom: 10px; }
+    button:hover { background: #0055aa; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    button.secondary { background: #666; }
+    button.secondary:hover { background: #555; }
+    .log { background: #1d1d1f; color: #f5f5f7; padding: 15px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 12px; max-height: 400px; overflow-y: auto; margin-top: 15px; white-space: pre-wrap; }
+    .log .success { color: #30d158; }
+    .log .error { color: #ff453a; }
+    .log .info { color: #64d2ff; }
+    .log .warning { color: #ffd60a; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+    .stat-card { background: white; padding: 15px; border-radius: 8px; border: 1px solid #e0e0e0; }
+    .stat-value { font-size: 32px; font-weight: 700; color: #0066cc; }
+    .stat-label { font-size: 12px; color: #7a7a7a; margin-top: 5px; }
+    .progress { height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden; margin-top: 10px; }
+    .progress-bar { height: 100%; background: #0066cc; transition: width 0.3s ease; }
+    .warning-box { background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+    .warning-box h3 { color: #856404; margin-bottom: 10px; }
+    .warning-box p { color: #856404; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 Supabase Data Migration Tool</h1>
+    <p class="subtitle">Migrate existing JSON data to Supabase database</p>
+
+    <div class="warning-box">
+      <h3>⚠️ Important: Run Database Migrations First</h3>
+      <p>Before using this tool, ensure you have run all SQL migrations in Supabase SQL Editor:<br>
+      <strong>supabase/migrations/00_run_all_migrations.sql</strong></p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Migration Steps</div>
+      <button onclick="migrateCategories()">1. Migrate Categories</button>
+      <button onclick="migrateProducts()">2. Migrate Products</button>
+      <button onclick="migrateProductImages()">3. Upload Product Images</button>
+      <button onclick="migrateBanners()">4. Migrate Banners</button>
+      <button onclick="uploadBannerMedia()">5. Upload Banner Media</button>
+      <button onclick="migrateSEO()">6. Migrate SEO Data</button>
+      <button onclick="migrateSettings()">7. Migrate Settings</button>
+      <button class="secondary" onclick="runAllMigrations()">▶ Run All Migrations</button>
+      <button class="secondary" onclick="clearLog()">Clear Log</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Migration Statistics</div>
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-categories">0</div>
+          <div class="stat-label">Categories</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-products">0</div>
+          <div class="stat-label">Products</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-images">0</div>
+          <div class="stat-label">Images</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-banners">0</div>
+          <div class="stat-label">Banners</div>
+        </div>
+      </div>
+      <div class="progress">
+        <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Migration Log</div>
+      <div class="log" id="log">Waiting to start migration...</div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    // SUPABASE CLIENT INITIALIZATION
+    // ============================================================
+    const SUPABASE_URL = 'https://rguxjldnoxvwbfsgkazs.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJndXhqbGRub3h2d2Jmc2drYXpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4ODEzMzksImV4cCI6MjEwMjQ1NzMzOX0.nUiAgCGDYb8i5Um_Htw7_0YVTTEDjtHSAQE1oIptYRA';
+
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ============================================================
+    // CONNECTION TEST
+    // ============================================================
+    async function testConnection() {
+      log('Testing Supabase connection...', 'info');
+      try {
+        const { data, error } = await supabaseClient
+          .from('categories')
+          .select('id')
+          .limit(1);
+
+        if (error) {
+          log(`✗ Connection test failed: ${error.message}`, 'error');
+          log('Please check your SUPABASE_ANON_KEY in the migration tool', 'error');
+          return false;
+        }
+
+        log('✓ Connection test passed', 'success');
+        return true;
+      } catch (err) {
+        log(`✗ Connection error: ${err.message}`, 'error');
+        return false;
+      }
+    }
+
+    let stats = { categories: 0, products: 0, images: 0, banners: 0 };
+
+    // ============================================================
+    // LOGGING UTILITIES
+    // ============================================================
+    function log(message, type = 'info') {
+      const logEl = document.getElementById('log');
+      const timestamp = new Date().toLocaleTimeString();
+      const className = type;
+      logEl.innerHTML += `<span class="${className}">[${timestamp}] ${message}</span>\n`;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function clearLog() {
+      document.getElementById('log').innerHTML = 'Log cleared.\n';
+    }
+
+    function updateStats() {
+      document.getElementById('stat-categories').textContent = stats.categories;
+      document.getElementById('stat-products').textContent = stats.products;
+      document.getElementById('stat-images').textContent = stats.images;
+      document.getElementById('stat-banners').textContent = stats.banners;
+    }
+
+    function updateProgress(percent) {
+      document.getElementById('progress-bar').style.width = percent + '%';
+    }
+
+    // ============================================================
+    // CATEGORY MIGRATION
+    // ============================================================
+    async function migrateCategories() {
+      log('Starting category migration...', 'info');
+
+      try {
+        // Categories are already inserted by SQL migration
+        const { data, error } = await supabaseClient
+          .from('categories')
+          .select('*');
+
+        if (error) throw error;
+
+        stats.categories = data.length;
+        updateStats();
+        log(`✓ Categories already exist: ${data.length} categories`, 'success');
+        return true;
+      } catch (error) {
+        log(`✗ Category migration failed: ${error.message}`, 'error');
+        return false;
+      }
+    }
+
+    // ============================================================
+    // PRODUCT MIGRATION
+    // ============================================================
+    async function migrateProducts() {
+      log('Starting product migration...', 'info');
+
+      try {
+        // Fetch products.json
+        const response = await fetch('/data/products.json');
+        const data = await response.json();
+        const products = data.products || data;
+
+        log(`Found ${products.length} products to migrate`, 'info');
+
+        // Get category mappings
+        const { data: categories, error: catError } = await supabaseClient
+          .from('categories')
+          .select('id, name, slug');
+
+        if (catError) throw catError;
+
+        const categoryMap = {};
+        categories.forEach(cat => {
+          categoryMap[cat.name.toLowerCase()] = cat.id;
+          categoryMap[cat.slug.toLowerCase()] = cat.id;
+        });
+
+        // Map "vase" to "vases"
+        categoryMap['vase'] = categoryMap['vases'];
+
+        let successCount = 0;
+
+        for (const product of products) {
+          try {
+            // Map category
+            const categoryName = (product.category || '').toLowerCase();
+            const category_id = categoryMap[categoryName] || categoryMap['table-lamps'];
+
+            const productData = {
+              slug: product.id,
+              name: product.name,
+              category_id: category_id,
+              price: product.price,
+              description: product.description,
+              material: product.material || 'metal',
+              in_stock: product.inStock !== false,
+              status: 'published',
+              featured: false,
+              meta_title: product.seo?.metaTitle || null,
+              meta_description: product.seo?.metaDescription || null,
+              image_alt: product.seo?.imageAlt || null
+            };
+
+            const { error: insertError } = await supabase
+              .from('products')
+              .insert(productData);
+
+            if (insertError) {
+              if (insertError.code === '23505') {
+                log(`⚠ Product ${product.id} already exists, skipping`, 'warning');
+              } else {
+                throw insertError;
+              }
+            } else {
+              log(`✓ Migrated: ${product.name}`, 'success');
+              successCount++;
+            }
+          } catch (err) {
+            log(`✗ Failed to migrate ${product.id}: ${err.message}`, 'error');
+          }
+        }
+
+        stats.products = successCount;
+        updateStats();
+        log(`✓ Product migration complete: ${successCount}/${products.length} products`, 'success');
+        return true;
+      } catch (error) {
+        log(`✗ Product migration failed: ${error.message}`, 'error');
+        return false;
+      }
+    }
+
+    // ============================================================
+    // PRODUCT IMAGE MIGRATION
+    // ============================================================
+    async function migrateProductImages() {
+      log('Starting product image upload...', 'info');
+      log('⚠ NOTE: This will upload images to Supabase Storage', 'warning');
+
+      try {
+        // Fetch products.json
+        const response = await fetch('/data/products.json');
+        const data = await response.json();
+        const products = data.products || data;
+
+        // Get product IDs from database
+        const { data: dbProducts, error: productsError } = await supabase
+          .from('products')
+          .select('id, slug');
+
+        if (productsError) throw productsError;
+
+        const productMap = {};
+        dbProducts.forEach(p => {
+          productMap[p.slug] = p.id;
+        });
+
+        let totalImages = 0;
+        let uploadedImages = 0;
+
+        for (const product of products) {
+          const productId = productMap[product.id];
+          if (!productId) {
+            log(`⚠ Product ${product.id} not found in database, skipping images`, 'warning');
+            continue;
+          }
+
+          if (!product.images || product.images.length === 0) {
+            continue;
+          }
+
+          totalImages += product.images.length;
+
+          for (let i = 0; i < product.images.length; i++) {
+            const imagePath = product.images[i];
+            const isPrimary = i === 0;
+
+            try {
+              // Fetch the image as blob
+              const imageResponse = await fetch('/' + imagePath);
+              if (!imageResponse.ok) {
+                log(`✗ Failed to fetch image: ${imagePath}`, 'error');
+                continue;
+              }
+
+              const imageBlob = await imageResponse.blob();
+              const fileName = imagePath.split('/').pop();
+              const storagePath = `${product.id}/${fileName}`;
+
+              // Upload to Supabase Storage
+              const { error: uploadError } = await supabaseClient.storage
+                .from('product-images')
+                .upload(storagePath, imageBlob, {
+                  contentType: imageBlob.type,
+                  upsert: true
+                });
+
+              if (uploadError) throw uploadError;
+
+              // Get public URL
+              const { data: urlData } = supabaseClient.storage
+                .from('product-images')
+                .getPublicUrl(storagePath);
+
+              // Insert product_images record
+              const { error: insertError } = await supabase
+                .from('product_images')
+                .insert({
+                  product_id: productId,
+                  storage_path: storagePath,
+                  public_url: urlData.publicUrl,
+                  alt_text: product.seo?.imageAlt || product.name,
+                  sort_order: i,
+                  is_primary: isPrimary
+                });
+
+              if (insertError && insertError.code !== '23505') {
+                throw insertError;
+              }
+
+              uploadedImages++;
+              log(`✓ Uploaded: ${fileName} for ${product.name}`, 'success');
+            } catch (err) {
+              log(`✗ Failed to upload ${imagePath}: ${err.message}`, 'error');
+            }
+          }
+        }
+
+        stats.images = uploadedImages;
+        updateStats();
+        log(`✓ Image upload complete: ${uploadedImages}/${totalImages} images`, 'success');
+        return true;
+      } catch (error) {
+        log(`✗ Image migration failed: ${error.message}`, 'error');
+        return false;
+      }
+    }
+
+    // ============================================================
+    // BANNER MIGRATION
+    // ============================================================
+    async function migrateBanners() {
+      log('Starting banner migration...', 'info');
+
+      try {
+        const response = await fetch('/data/banner.json');
+        const data = await response.json();
+        const slides = data.slides || [];
+
+        log(`Found ${slides.length} banners to migrate`, 'info');
+
+        let successCount = 0;
+
+        for (let i = 0; i < slides.length; i++) {
+          const slide = slides[i];
+
+          try {
+            const bannerData = {
+              type: slide.type,
+              storage_path: null,
+              public_url: slide.type === 'image' ? slide.image : slide.video,
+              status: 'active',
+              sort_order: i
+            };
+
+            const { error: insertError } = await supabase
+              .from('banners')
+              .insert(bannerData);
+
+            if (insertError) {
+              if (insertError.code === '23505') {
+                log(`⚠ Banner ${i + 1} already exists, skipping`, 'warning');
+              } else {
+                throw insertError;
+              }
+            } else {
+              log(`✓ Migrated: Banner ${i + 1} (${slide.type})`, 'success');
+              successCount++;
+            }
+          } catch (err) {
+            log(`✗ Failed to migrate banner ${i + 1}: ${err.message}`, 'error');
+          }
+        }
+
+        stats.banners = successCount;
+        updateStats();
+        log(`✓ Banner migration complete: ${successCount}/${slides.length} banners`, 'success');
+        return true;
+      } catch (error) {
+        log(`✗ Banner migration failed: ${error.message}`, 'error');
+        return false;
+      }
+    }
+
+    // ============================================================
+    // BANNER MEDIA UPLOAD (Optional - keep existing paths for now)
+    // ============================================================
+    async function uploadBannerMedia() {
+      log('Banner media upload skipped - using existing asset paths', 'info');
+      log('Banners will reference existing /assets/ paths', 'info');
+      return true;
+    }
+
+    // ============================================================
+    // SEO MIGRATION
+    // ============================================================
+    async function migrateSEO() {
+      log('Starting SEO migration...', 'info');
+      log('SEO data already inserted by SQL migration', 'info');
+
+      try {
+        const { data, error } = await supabase
+          .from('seo_pages')
+          .select('*');
+
+        if (error) throw error;
+
+        log(`✓ SEO pages exist: ${data.length} pages`, 'success');
+        return true;
+      } catch (error) {
+        log(`✗ SEO migration check failed: ${error.message}`, 'error');
+        return false;
+      }
+    }
+
+    // ============================================================
+    // SETTINGS MIGRATION
+    // ============================================================
+    async function migrateSettings() {
+      log('Starting settings migration...', 'info');
+      log('Settings already inserted by SQL migration', 'info');
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('site_settings')
+          .select('*');
+
+        if (error) throw error;
+
+        log(`✓ Site settings exist: ${data.length} settings`, 'success');
+        return true;
+      } catch (error) {
+        log(`✗ Settings migration check failed: ${error.message}`, 'error');
+        return false;
+      }
+    }
+
+    // ============================================================
+    // RUN ALL MIGRATIONS
+    // ============================================================
+    async function runAllMigrations() {
+      log('========================================', 'info');
+      log('STARTING COMPLETE MIGRATION', 'info');
+      log('========================================', 'info');
+
+      updateProgress(0);
+
+      // Test connection first
+      const connectionOk = await testConnection();
+      if (!connectionOk) {
+        log('\n========================================', 'error');
+        log('✗ MIGRATION FAILED - CONNECTION ERROR', 'error');
+        log('========================================', 'error');
+        log('Please check your Supabase credentials and try again.', 'error');
+        return;
+      }
+
+      const steps = [
+        { fn: migrateCategories, name: 'Categories', progress: 10, required: true },
+        { fn: migrateProducts, name: 'Products', progress: 30, required: true },
+        { fn: migrateProductImages, name: 'Product Images', progress: 60, required: true },
+        { fn: migrateBanners, name: 'Banners', progress: 80, required: true },
+        { fn: migrateSEO, name: 'SEO', progress: 90, required: false },
+        { fn: migrateSettings, name: 'Settings', progress: 100, required: false }
+      ];
+
+      let failedSteps = [];
+      let successfulSteps = [];
+
+      for (const step of steps) {
+        log(`\n--- ${step.name} ---`, 'info');
+        const success = await step.fn();
+
+        if (success) {
+          successfulSteps.push(step.name);
+        } else {
+          failedSteps.push(step.name);
+          if (step.required) {
+            log(`✗ ${step.name} migration FAILED (required step)`, 'error');
+          } else {
+            log(`⚠ ${step.name} migration had errors, but continuing...`, 'warning');
+          }
+        }
+
+        updateProgress(step.progress);
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+
+      log('\n========================================', 'info');
+
+      // Determine overall success
+      const criticalFailures = failedSteps.filter(name => {
+        const step = steps.find(s => s.name === name);
+        return step && step.required;
+      });
+
+      if (criticalFailures.length > 0) {
+        log('✗ MIGRATION FAILED', 'error');
+        log('========================================', 'error');
+        log(`\nFailed steps: ${failedSteps.join(', ')}`, 'error');
+        log(`Successful steps: ${successfulSteps.join(', ')}`, 'warning');
+      } else if (failedSteps.length > 0) {
+        log('⚠ MIGRATION COMPLETED WITH WARNINGS', 'warning');
+        log('========================================', 'warning');
+        log(`\nSome optional steps failed: ${failedSteps.join(', ')}`, 'warning');
+        log(`Successful steps: ${successfulSteps.join(', ')}`, 'success');
+      } else {
+        log('✓ MIGRATION COMPLETE!', 'success');
+        log('========================================', 'success');
+      }
+
+      log(`\nMigration Summary:`, 'info');
+      log(`- Categories: ${stats.categories}`, 'info');
+      log(`- Products: ${stats.products}`, 'info');
+      log(`- Images: ${stats.images}`, 'info');
+      log(`- Banners: ${stats.banners}`, 'info');
+    }
+
+    // Initialize
+    log('Migration tool ready. Click "Run All Migrations" to start.', 'info');
+  </script>
+</body>
+</html>

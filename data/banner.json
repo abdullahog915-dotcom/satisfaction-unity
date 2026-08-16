@@ -1,0 +1,20 @@
+{
+  "slides": [
+    {
+      "type": "video",
+      "video": "/assets/products/banner-1-optimized.mp4"
+    },
+    {
+      "type": "image",
+      "image": "/assets/banner-2.webp"
+    },
+    {
+      "type": "image",
+      "image": "/assets/banner-3.webp"
+    },
+    {
+      "type": "image",
+      "image": "/assets/banner-4.webp"
+    }
+  ]
+}

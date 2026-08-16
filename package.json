@@ -1,0 +1,13 @@
+{
+  "name": "satisfaction-unity",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Satisfaction Unity - Handcrafted lamps and vases e-commerce website",
+  "scripts": {
+    "dev": "wrangler pages dev . --port 8788",
+    "dev:prod": "wrangler pages dev . --port 8788"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.112.3"
+  }
+}

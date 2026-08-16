@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Supabase Migration Tool</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 20px; background: #f5f5f7; }
+    .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    h1 { font-size: 28px; margin-bottom: 10px; color: #1d1d1f; }
+    .subtitle { color: #7a7a7a; margin-bottom: 30px; }
+    .section { margin-bottom: 30px; padding: 20px; background: #f9f9f9; border-radius: 8px; }
+    .section-title { font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #333; }
+    button { background: #0066cc; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; margin-right: 10px; margin-bottom: 10px; }
+    button:hover { background: #0055aa; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    button.secondary { background: #666; }
+    button.secondary:hover { background: #555; }
+    .log { background: #1d1d1f; color: #f5f5f7; padding: 15px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 12px; max-height: 400px; overflow-y: auto; margin-top: 15px; white-space: pre-wrap; }
+    .log .success { color: #30d158; }
+    .log .error { color: #ff453a; }
+    .log .info { color: #64d2ff; }
+    .log .warning { color: #ffd60a; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+    .stat-card { background: white; padding: 15px; border-radius: 8px; border: 1px solid #e0e0e0; }
+    .stat-value { font-size: 32px; font-weight: 700; color: #0066cc; }
+    .stat-label { font-size: 12px; color: #7a7a7a; margin-top: 5px; }
+    .progress { height: 6px; background: #e0e0e0; border-radius: 3px; overflow: hidden; margin-top: 10px; }
+    .progress-bar { height: 100%; background: #0066cc; transition: width 0.3s ease; }
+    .warning-box { background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+    .warning-box h3 { color: #856404; margin-bottom: 10px; }
+    .warning-box p { color: #856404; font-size: 14px; line-height: 1.5; }
+    .security-box { background: #d4edda; border: 1px solid #28a745; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+    .security-box h3 { color: #155724; margin-bottom: 10px; }
+    .security-box p { color: #155724; font-size: 14px; line-height: 1.5; }
+    input[type="password"] { width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 14px; margin-top: 10px; font-family: monospace; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔒 Secure Supabase Migration Tool</h1>
+    <p class="subtitle">Server-side migration with secure credentials</p>
+
+    <div class="security-box">
+      <h3>✅ Secure Architecture</h3>
+      <p>This tool uses server-side migration endpoints. Your Supabase service key remains secure on the server and is NEVER exposed to the browser.</p>
+    </div>
+
+    <div class="warning-box">
+      <h3>⚠️ Before Starting</h3>
+      <p><strong>1.</strong> Run database migrations in Supabase SQL Editor: <code>supabase/migrations/00_run_all_migrations.sql</code><br>
+      <strong>2.</strong> Create storage buckets: <code>product-images</code> and <code>banner-media</code><br>
+      <strong>3.</strong> Set environment variables in Cloudflare Pages:<br>
+      &nbsp;&nbsp;• <code>SUPABASE_URL</code><br>
+      &nbsp;&nbsp;• <code>SUPABASE_SERVICE_KEY</code><br>
+      &nbsp;&nbsp;• <code>MIGRATION_SECRET</code> (generate a random secret)<br>
+      <strong>4.</strong> Enter your MIGRATION_SECRET below to authorize this migration</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Authorization</div>
+      <label for="migration-secret" style="display: block; margin-bottom: 5px; font-weight: 500;">Migration Secret:</label>
+      <input type="password" id="migration-secret" placeholder="Enter your MIGRATION_SECRET from Cloudflare env vars">
+      <p style="margin-top: 10px; font-size: 13px; color: #7a7a7a;">This secret authorizes the migration. It must match the MIGRATION_SECRET environment variable in Cloudflare Pages.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Migration Steps</div>
+      <button class="secondary" onclick="runAllMigrations()">▶ Run Complete Migration</button>
+      <button class="secondary" onclick="clearLog()">Clear Log</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Migration Statistics</div>
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-categories">0</div>
+          <div class="stat-label">Categories</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-products">0</div>
+          <div class="stat-label">Products</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-images">0</div>
+          <div class="stat-label">Images</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-banners">0</div>
+          <div class="stat-label">Banners</div>
+        </div>
+      </div>
+      <div class="progress">
+        <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Migration Log</div>
+      <div class="log" id="log">Ready to start secure migration...\nEnter your MIGRATION_SECRET and click "Run Complete Migration".</div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    // SECURE MIGRATION CLIENT
+    // All sensitive operations happen server-side
+    // Browser only sends commands to /api/migrate endpoint
+    // ============================================================
+
+    const MIGRATION_ENDPOINT = '/api/migrate';
+    let stats = { categories: 0, products: 0, images: 0, banners: 0 };
+
+    // ============================================================
+    // LOGGING UTILITIES
+    // ============================================================
+    function log(message, type = 'info') {
+      const logEl = document.getElementById('log');
+      const timestamp = new Date().toLocaleTimeString();
+      const className = type;
+      logEl.innerHTML += `<span class="${className}">[${timestamp}] ${message}</span>\n`;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function clearLog() {
+      document.getElementById('log').innerHTML = 'Log cleared.\n';
+    }
+
+    function updateStats() {
+      document.getElementById('stat-categories').textContent = stats.categories;
+      document.getElementById('stat-products').textContent = stats.products;
+      document.getElementById('stat-images').textContent = stats.images;
+      document.getElementById('stat-banners').textContent = stats.banners;
+    }
+
+    function updateProgress(percent) {
+      document.getElementById('progress-bar').style.width = percent + '%';
+    }
+
+    function getMigrationSecret() {
+      const secret = document.getElementById('migration-secret').value.trim();
+      if (!secret) {
+        throw new Error('Please enter your MIGRATION_SECRET');
+      }
+      return secret;
+    }
+
+    // ============================================================
+    // API CALL HELPER
+    // ============================================================
+    async function callMigrationAPI(action, data = null) {
+      const secret = getMigrationSecret();
+
+      const response = await fetch(MIGRATION_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${secret}`
+        },
+        body: JSON.stringify({ action, data })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || `HTTP ${response.status}`);
+      }
+
+      return result;
+    }
+
+    // ============================================================
+    // MIGRATION STEPS
+    // ============================================================
+    async function testConnection() {
+      log('Testing server-side Supabase connection...', 'info');
+      try {
+        const result = await callMigrationAPI('test_connection');
+        log(`✓ ${result.message}`, 'success');
+        return true;
+      } catch (error) {
+        log(`✗ Connection test failed: ${error.message}`, 'error');
+        return false;
+      }
+    }
+
+    async function migrateCategories() {
+      log('Verifying categories...', 'info');
+      try {
+        const result = await callMigrationAPI('migrate_categories');
+        stats.categories = result.count || 0;
+        updateStats();
+        log(`✓ ${result.message}`, 'success');
+        return true;
+      } catch (error) {
+        log(`✗ Categories verification failed: ${error.message}`, 'error');
+        return false;
+      }
+    }
+
+    async function migrateProducts() {
+      log('Migrating products from JSON...', 'info');
+      try {
+        // Fetch products.json from the static site
+        const response = await fetch('/data/products.json');
+        const data = await response.json();
+        const products = data.products || data;
+
+        log(`Found ${products.length} products to migrate`, 'info');
+
+        // Send to server-side migration endpoint
+        const result = await callMigrationAPI('migrate_products', products);
+
+        stats.products = result.successCount || 0;
+        updateStats();
+
+        if (result.errors && result.errors.length > 0) {
+          log(`⚠ Some products had errors:`, 'warning');
+          result.errors.forEach(err => log(`  ${err}`, 'warning'));
+        }
+
+        log(`✓ ${result.message}`, 'success');
+        return result.success;
+      } catch (error) {
+        log(`✗ Product migration failed: ${error.message}`, 'error');
+        return false;
+      }
+    }
+
+    async function migrateProductImages() {
+      log('Uploading product images to Supabase Storage...', 'info');
+      try {
+        const result = await callMigrationAPI('migrate_product_images');
+        stats.images = result.total || 0;
+        updateStats();
+
+        if (result.missingFiles && result.missingFiles.length > 0) {
+          log(`⚠ Missing local files:`, 'warning');
+          result.missingFiles.forEach(file => log(`  ${file}`, 'warning'));
+        }
+
+        if (result.errors && result.errors.length > 0) {
+          log(`⚠ Some images had errors:`, 'warning');
+          result.errors.forEach(err => log(`  ${err}`, 'warning'));
+        }
+
+        log(`✓ ${result.message}`, 'success');
+        return result.success;
+      } catch (error) {
+        log(`✗ Image migration failed: ${error.message}`, 'error');
+        return false;
+      }
+    }
+
+    async function migrateBanners() {
+      log('Migrating banners from JSON...', 'info');
+      try {
+        const response = await fetch('/data/banner.json');
+        const data = await response.json();
+        const slides = data.slides || [];
+
+        log(`Found ${slides.length} banners to migrate`, 'info');
+
+        const result = await callMigrationAPI('migrate_banners', slides);
+
+        stats.banners = result.successCount || 0;
+        updateStats();
+
+        if (result.errors && result.errors.length > 0) {
+          log(`⚠ Some banners had errors:`, 'warning');
+          result.errors.forEach(err => log(`  ${err}`, 'warning'));
+        }
+
+        log(`✓ ${result.message}`, 'success');
+        return result.success;
+      } catch (error) {
+        log(`✗ Banner migration failed: ${error.message}`, 'error');
+        return false;
+      }
+    }
+
+    async function verifySEO() {
+      log('Verifying SEO data...', 'info');
+      try {
+        const result = await callMigrationAPI('verify_seo');
+        log(`✓ ${result.message}`, 'success');
+        return true;
+      } catch (error) {
+        log(`✗ SEO verification failed: ${error.message}`, 'error');
+        return false;
+      }
+    }
+
+    async function verifySettings() {
+      log('Verifying site settings...', 'info');
+      try {
+        const result = await callMigrationAPI('verify_settings');
+        log(`✓ ${result.message}`, 'success');
+        return true;
+      } catch (error) {
+        log(`✗ Settings verification failed: ${error.message}`, 'error');
+        return false;
+      }
+    }
+
+    // ============================================================
+    // RUN ALL MIGRATIONS
+    // ============================================================
+    async function runAllMigrations() {
+      try {
+        getMigrationSecret(); // Validate secret is entered
+      } catch (error) {
+        log(`✗ ${error.message}`, 'error');
+        alert(error.message);
+        return;
+      }
+
+      log('========================================', 'info');
+      log('STARTING SECURE MIGRATION', 'info');
+      log('========================================', 'info');
+
+      updateProgress(0);
+
+      // Connection test
+      const connectionOk = await testConnection();
+      if (!connectionOk) {
+        log('\n========================================', 'error');
+        log('✗ MIGRATION FAILED - CONNECTION ERROR', 'error');
+        log('========================================', 'error');
+        return;
+      }
+
+      const steps = [
+        { fn: migrateCategories, name: 'Categories', progress: 15, required: true },
+        { fn: migrateProducts, name: 'Products', progress: 35, required: true },
+        { fn: migrateProductImages, name: 'Product Images', progress: 60, required: false },
+        { fn: migrateBanners, name: 'Banners', progress: 75, required: true },
+        { fn: verifySEO, name: 'SEO', progress: 90, required: false },
+        { fn: verifySettings, name: 'Settings', progress: 100, required: false }
+      ];
+
+      let failedSteps = [];
+      let successfulSteps = [];
+
+      for (const step of steps) {
+        log(`\n--- ${step.name} ---`, 'info');
+        const success = await step.fn();
+
+        if (success) {
+          successfulSteps.push(step.name);
+        } else {
+          failedSteps.push({ name: step.name, required: step.required });
+        }
+
+        updateProgress(step.progress);
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+
+      log('\n========================================', 'info');
+
+      // Determine overall success
+      const criticalFailures = failedSteps.filter(s => s.required);
+
+      if (criticalFailures.length > 0) {
+        log('✗ MIGRATION FAILED', 'error');
+        log('========================================', 'error');
+        log(`\nRequired steps failed: ${criticalFailures.map(s => s.name).join(', ')}`, 'error');
+        if (successfulSteps.length > 0) {
+          log(`Successful steps: ${successfulSteps.join(', ')}`, 'info');
+        }
+      } else if (failedSteps.length > 0) {
+        log('⚠ MIGRATION COMPLETED WITH WARNINGS', 'warning');
+        log('========================================', 'warning');
+        log(`\nOptional steps failed: ${failedSteps.map(s => s.name).join(', ')}`, 'warning');
+        log(`Successful steps: ${successfulSteps.join(', ')}`, 'success');
+      } else {
+        log('✓ MIGRATION COMPLETE!', 'success');
+        log('========================================', 'success');
+      }
+
+      log(`\nMigration Summary:`, 'info');
+      log(`- Categories: ${stats.categories}`, 'info');
+      log(`- Products: ${stats.products}`, 'info');
+      log(`- Images: ${stats.images}`, 'info');
+      log(`- Banners: ${stats.banners}`, 'info');
+
+      log('\n⚠ Next Steps:', 'warning');
+      log('1. Verify data in Supabase Dashboard → Table Editor', 'info');
+      log('2. Implement image upload to Supabase Storage', 'info');
+      log('3. Test customer website with Supabase data', 'info');
+    }
+  </script>
+</body>
+</html>
