@@ -344,8 +344,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fetch featured products from Supabase (with fallback for offline mode)
     (async () => {
         try {
-            const products = await ProductService.getFeatured(6);
-            console.log('✅ Featured products loaded from SUPABASE:', products.length, 'products');
+            const allProducts = await ProductService.getAll();
+const products = allProducts.slice(0, 6);
+console.log('✅ Products loaded from SUPABASE:', products.length, 'products');
             const homeGrid = document.getElementById('home-product-grid');
             if (!homeGrid || products.length === 0) return;
             homeGrid.innerHTML = products.map((product, idx) => {
