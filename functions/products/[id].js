@@ -1,87 +1,59 @@
-// functions/products/[id].js
-// Cloudflare Pages Function
-// Runs at the edge for every request to /products/:id
-// Injects correct og:image / og:title / og:description into the HTML
-// BEFORE it reaches the browser or a crawler (WhatsApp, Facebook, etc).
-// This is required because WhatsApp's link-preview bot does NOT run
-// JavaScript, so tags added by client-side JS are invisible to it.
-//
-// SAFETY: everything is wrapped in try/catch. If ANYTHING goes wrong,
-// we fall back to serving the plain product-detail.html page untouched,
-// so the site can never end up blank/broken because of this function.
+import { escapeHtml, publicConfig, restHeaders } from '../_shared/supabase.js';
 
-export async function onRequest(context) {
-  const { request, env, params } = context;
+export async function onRequest({ request, env, params }) {
   const origin = new URL(request.url).origin;
   const plainPageUrl = `${origin}/product-detail.html`;
 
   try {
-    const productId = params.id;
-
-    // 1. Get the base HTML page from the deployed static assets
     const htmlResponse = await env.ASSETS.fetch(plainPageUrl);
-    if (!htmlResponse.ok) {
-      return env.ASSETS.fetch(request);
-    }
+    if (!htmlResponse.ok) return env.ASSETS.fetch(request);
     let html = await htmlResponse.text();
-
-    // 2. Get product data
-    const dataResponse = await env.ASSETS.fetch(`${origin}/data/products.json`);
-    if (!dataResponse.ok) {
-      return new Response(html, {
-        headers: { 'content-type': 'text/html; charset=UTF-8' },
-      });
-    }
-
-    const data = await dataResponse.json();
-    const products = Array.isArray(data) ? data : data.products;
-    const product = products.find((p) => p.id === productId);
-
-    if (!product) {
-      return new Response(html, {
-        headers: { 'content-type': 'text/html; charset=UTF-8' },
-      });
-    }
-
-    // 3. Build the meta tag values
-    const pageUrl = `${origin}/products/${product.id}`;
-    const seoTitle =
-      (product.seo && product.seo.metaTitle) || `${product.name} | Satisfaction Unity`;
-    const seoDesc =
-      (product.seo && product.seo.metaDescription) ||
-      (product.description ? product.description.slice(0, 155) : '');
-
-    let seoImage = (product.images && product.images[0]) || '';
-    if (seoImage && !/^https?:\/\//i.test(seoImage)) {
-      seoImage = `${origin}/${seoImage.replace(/^\//, '')}`;
-    }
-
-    const escape = (str) =>
-      String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
-
-    const metaTags = `<title>${escape(seoTitle)}</title>
-<meta name="description" content="${escape(seoDesc)}" />
-<meta property="og:type" content="product" />
-<meta property="og:title" content="${escape(seoTitle)}" />
-<meta property="og:description" content="${escape(seoDesc)}" />
-<meta property="og:url" content="${escape(pageUrl)}" />
-${seoImage ? `<meta property="og:image" content="${escape(seoImage)}" />` : ''}
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="${escape(seoTitle)}" />
-<meta name="twitter:description" content="${escape(seoDesc)}" />
-${seoImage ? `<meta name="twitter:image" content="${escape(seoImage)}" />` : ''}
-`;
-
-    // 4. Swap the static <title> for ours and inject the rest before </head>
-    if (html.includes('</head>')) {
-      html = html.replace(/<title>[^<]*<\/title>/i, '');
-      html = html.replace('</head>', `${metaTags}</head>`);
-    }
-
-    return new Response(html, {
-      headers: { 'content-type': 'text/html; charset=UTF-8' },
+    const { url, anonKey } = publicConfig(env);
+    const query = new URL(`${url}/rest/v1/products`);
+    query.searchParams.set('slug', `eq.${params.id}`);
+    query.searchParams.set('status', 'eq.published');
+    query.searchParams.set('select', 'slug,name,price,description,in_stock,meta_title,meta_description,image_alt,product_images(public_url,alt_text,sort_order,is_primary)');
+    query.searchParams.set('limit', '1');
+    const dataResponse = await fetch(query, {
+      headers: restHeaders(anonKey, { 'cache-control': 'no-cache' }), cf: { cacheTtl: 0 },
     });
-  } catch (err) {
+    if (!dataResponse.ok) throw new Error(`Product query failed: ${dataResponse.status}`);
+    const [product] = await dataResponse.json();
+    if (!product) return new Response(html, { headers: { 'content-type': 'text/html; charset=UTF-8' } });
+
+    const images = (product.product_images || []).sort((a, b) => Number(b.is_primary) - Number(a.is_primary) || a.sort_order - b.sort_order);
+    const pageUrl = `${origin}/products/${product.slug}`;
+    const seoTitle = product.meta_title || `${product.name} | Satisfaction Unity`;
+    const seoDesc = product.meta_description || (product.description || '').slice(0, 155);
+    const seoImage = images[0]?.public_url || '';
+    const schema = {
+      '@context': 'https://schema.org', '@type': 'Product', name: product.name,
+      description: product.description || '', image: images.map((image) => image.public_url),
+      offers: { '@type': 'Offer', priceCurrency: 'INR', price: product.price,
+        availability: product.in_stock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock', url: pageUrl },
+    };
+    const tags = `<title>${escapeHtml(seoTitle)}</title>
+<meta name="description" content="${escapeHtml(seoDesc)}">
+<meta property="og:type" content="product">
+<meta property="og:title" content="${escapeHtml(seoTitle)}">
+<meta property="og:description" content="${escapeHtml(seoDesc)}">
+<meta property="og:url" content="${escapeHtml(pageUrl)}">
+${seoImage ? `<meta property="og:image" content="${escapeHtml(seoImage)}">` : ''}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escapeHtml(seoTitle)}">
+<meta name="twitter:description" content="${escapeHtml(seoDesc)}">
+${seoImage ? `<meta name="twitter:image" content="${escapeHtml(seoImage)}">` : ''}
+<link rel="canonical" href="${escapeHtml(pageUrl)}">
+<script type="application/ld+json" data-supabase-product-seo>${JSON.stringify(schema).replace(/</g, '\\u003c')}</script>`;
+
+    html = html
+      .replace(/<title>[\s\S]*?<\/title>/i, '')
+      .replace(/<meta\s+(?:name=["']description["']|property=["']og:[^"']+["']|name=["']twitter:[^"']+["'])[^>]*>\s*/gi, '')
+      .replace(/<link\s+rel=["']canonical["'][^>]*>\s*/gi, '')
+      .replace('</head>', `${tags}\n</head>`);
+    return new Response(html, { headers: { 'content-type': 'text/html; charset=UTF-8', 'cache-control': 'public, max-age=0, must-revalidate' } });
+  } catch (error) {
+    console.error('Product SEO injection failed', error);
     return env.ASSETS.fetch(plainPageUrl);
   }
 }

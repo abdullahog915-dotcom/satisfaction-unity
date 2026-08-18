@@ -6,7 +6,10 @@
 <title>Collection - Satisfaction Unity</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-client.js"></script>
-  <script src="js/services/products.js"></script>
+<script src="js/services/products.js"></script>
+<script src="js/services/categories.js"></script>
+<script src="js/services/settings.js"></script>
+<script src="js/site-settings-loader.js" defer></script>
   <script src="seo-loader.js" defer></script>
 <link rel="icon" type="image/png" href="assets/fevicon/favicon-32x32.png?v=2" sizes="32x32" />
 <link rel="icon" type="image/png" href="assets/fevicon/favicon-16x16.png?v=2" sizes="16x16" />
@@ -87,8 +90,6 @@ html { scroll-behavior: smooth; }
 <div class="flex flex-col md:flex-row gap-4 justify-between items-center mb-8">
 <div class="flex flex-wrap gap-2 justify-center" id="category-filters">
 <button class="filter-pill active" data-category="all">All</button>
-<button class="filter-pill" data-category="Table Lamps">Table Lamps</button>
-<button class="filter-pill" data-category="Vase">Vases</button>
 </div>
 <div class="relative w-full md:w-72">
 <input type="text" id="search-input" placeholder="Search collection..." class="w-full bg-white border border-hairline rounded-full pl-4 pr-10 py-[10px] text-[14px] text-ink placeholder:text-ink-dim/60 focus:outline-none focus:border-accent transition-colors" />
@@ -129,6 +130,7 @@ function handleImageError(imgEl) {
     if (imgEl.dataset.fallbackStep === '1') { imgEl.dataset.fallbackStep = '2'; if (imgEl.src.endsWith('.png')) { imgEl.src = imgEl.src.replace(/\.png$/, '.jpeg'); return; } }
 }
 function formatPrice(amount) { return '₹' + Number(amount).toLocaleString('en-IN'); }
+function escapeHtml(value) { return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char])); }
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('mobile-menu-btn').addEventListener('click', function() {
@@ -146,31 +148,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyState = document.getElementById('empty-state');
     const productCount = document.getElementById('product-count');
     const searchInput = document.getElementById('search-input');
-    const categoryButtons = document.querySelectorAll('.filter-pill');
+    const filters = document.getElementById('category-filters');
+    let categoryButtons = document.querySelectorAll('.filter-pill');
     const resetButton = document.getElementById('reset-filters');
 
-    // Load products from Supabase with fallback to JSON
+    // Products and filters share Supabase as their only source of truth.
     (async () => {
       try {
-        allProducts = await ProductService.getAll();
-        if (allProducts.length === 0) throw new Error('No products');
+        const [products, categories] = await Promise.all([ProductService.getAll(), CategoryService.getAll()]);
+        allProducts = products;
+        renderCategoryFilters(categories);
         renderProducts();
       } catch (err) {
-        console.warn('⚠️ Supabase failed, FALLING BACK to JSON file:', err);
-        fetch('data/products.json').then(res => { if (!res.ok) throw new Error('Failed'); return res.json(); })
-        .then(data => { allProducts = Array.isArray(data) ? data : (data.products || []); renderProducts(); })
-        .catch(err => { grid.innerHTML = '<div class="col-span-full text-center text-ink-dim py-12 font-body">Unable to load products.</div>'; });
+        console.error('Supabase catalog load failed:', err);
+        grid.innerHTML = '<div class="col-span-full text-center text-ink-dim py-12 font-body">Unable to load products.</div>';
       }
     })();
 
-    categoryButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
+    function renderCategoryFilters(categories) {
+        const safe = (value) => String(value || '').replace(/[&<>"']/g, (char) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+        filters.innerHTML = '<button class="filter-pill active" data-category="all">All</button>' + categories.map(category => `<button class="filter-pill" data-category="${safe(category.slug)}">${safe(category.name)}</button>`).join('');
+        categoryButtons = filters.querySelectorAll('.filter-pill');
+        categoryButtons.forEach(btn => btn.addEventListener('click', () => {
             categoryButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            activeCategory = btn.getAttribute('data-category');
+            activeCategory = btn.dataset.category;
             renderProducts();
-        });
-    });
+        }));
+    }
 
     searchInput.addEventListener('input', (e) => { searchQuery = e.target.value.toLowerCase().trim(); renderProducts(); });
     resetButton.addEventListener('click', () => {
@@ -181,9 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderProducts() {
         const filtered = allProducts.filter(p => {
-            const pCat = (p.category || '').toLowerCase();
-            const targetCat = activeCategory.toLowerCase();
-            const matchesCategory = activeCategory === 'all' || pCat === targetCat || (targetCat === 'vase' && pCat === 'vases') || (targetCat === 'vases' && pCat === 'vase');
+            const matchesCategory = activeCategory === 'all' || (p.categorySlug || '').toLowerCase() === activeCategory.toLowerCase();
             const matchesSearch = (p.name || '').toLowerCase().includes(searchQuery) || (p.description || '').toLowerCase().includes(searchQuery) || (p.material || '').toLowerCase().includes(searchQuery) || (p.category || '').toLowerCase().includes(searchQuery);
             return matchesCategory && matchesSearch;
         });
@@ -195,10 +198,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const images = product.images || [];
             const primaryImg = images[0] || 'assets/products/lamp-01-1.png';
             const secondaryImg = images[1] || null;
-            const imgAlt = (product.seo && product.seo.imageAlt) || product.name;
-            const secondaryImageHtml = secondaryImg ? '<img src="'+secondaryImg+'" alt="'+imgAlt+'" class="product-img-secondary" onerror="handleImageError(this)" loading="lazy" />' : '';
+            const imgAlt = product.imageAlts?.[0] || (product.seo && product.seo.imageAlt) || product.name;
+            const secondaryAlt = product.imageAlts?.[1] || imgAlt;
+            const secondaryImageHtml = secondaryImg ? '<img src="'+escapeHtml(secondaryImg)+'" alt="'+escapeHtml(secondaryAlt)+'" class="product-img-secondary" onerror="handleImageError(this)" loading="lazy" />' : '';
             const stockBadge = product.inStock !== false ? '<span class="text-[10px] font-[600] text-emerald-700 uppercase">In Stock</span>' : '<span class="text-[10px] font-[600] text-rose-600 uppercase">Out of Stock</span>';
-            return '<a href="/products/'+product.id+'" class="product-card group reveal" data-delay="'+delay+'"><div class="product-img-container"><img src="'+primaryImg+'" alt="'+imgAlt+'" class="product-img-primary" onerror="handleImageError(this)" loading="lazy" />'+secondaryImageHtml+'<div class="absolute top-3 left-3 z-10"><span class="bg-white/90 backdrop-blur-sm text-ink text-[10px] font-[600] uppercase px-2.5 py-1 rounded-full border border-hairline/50">'+product.category+'</span></div><div class="absolute top-3 right-3 z-10">'+stockBadge+'</div></div><div class="p-5"><h3 class="font-display text-[17px] font-[600] text-ink leading-snug mb-1 group-hover:text-accent transition-colors">'+product.name+'</h3><p class="font-body text-[12px] text-ink-dim uppercase mb-3">'+(product.material||'')+'</p><div class="flex justify-between items-center"><span class="font-body text-[17px] font-[600] text-ink">'+formatPrice(product.price)+'</span><span class="font-body text-[14px] text-accent font-[400]">View →</span></div></div></a>';
+            return '<a href="/products/'+encodeURIComponent(product.id)+'" class="product-card group reveal" data-delay="'+delay+'"><div class="product-img-container"><img src="'+escapeHtml(primaryImg)+'" alt="'+escapeHtml(imgAlt)+'" class="product-img-primary" onerror="handleImageError(this)" loading="lazy" />'+secondaryImageHtml+'<div class="absolute top-3 left-3 z-10"><span class="bg-white/90 backdrop-blur-sm text-ink text-[10px] font-[600] uppercase px-2.5 py-1 rounded-full border border-hairline/50">'+escapeHtml(product.category)+'</span></div><div class="absolute top-3 right-3 z-10">'+stockBadge+'</div></div><div class="p-5"><h3 class="font-display text-[17px] font-[600] text-ink leading-snug mb-1 group-hover:text-accent transition-colors">'+escapeHtml(product.name)+'</h3><p class="font-body text-[12px] text-ink-dim uppercase mb-3">'+escapeHtml(product.material||'')+'</p><div class="flex justify-between items-center"><span class="font-body text-[17px] font-[600] text-ink">'+formatPrice(product.price)+'</span><span class="font-body text-[14px] text-accent font-[400]">View →</span></div></div></a>';
         }).join('');
         initReveal();
     }
@@ -220,4 +224,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 </body>
-</html>`r`n
+</html>

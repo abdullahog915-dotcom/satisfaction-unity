@@ -37,12 +37,12 @@
     if (!pageData) return;
     if (pageData.metaTitle) document.title = pageData.metaTitle;
     upsertMeta('name', 'description', pageData.metaDescription);
-    upsertMeta('property', 'og:title', pageData.metaTitle);
-    upsertMeta('property', 'og:description', pageData.metaDescription);
+    upsertMeta('property', 'og:title', pageData.ogTitle || pageData.metaTitle);
+    upsertMeta('property', 'og:description', pageData.ogDescription || pageData.metaDescription);
     upsertMeta('property', 'og:type', 'website');
     upsertMeta('name', 'twitter:card', 'summary_large_image');
-    upsertMeta('name', 'twitter:title', pageData.metaTitle);
-    upsertMeta('name', 'twitter:description', pageData.metaDescription);
+    upsertMeta('name', 'twitter:title', pageData.ogTitle || pageData.metaTitle);
+    upsertMeta('name', 'twitter:description', pageData.ogDescription || pageData.metaDescription);
     if (pageData.ogImage) {
       upsertMeta('property', 'og:image', pageData.ogImage);
       upsertMeta('name', 'twitter:image', pageData.ogImage);
@@ -54,8 +54,10 @@
 
   function addSchema(pageData) {
     if (!pageData || !pageData.schemaData) return;
+    document.querySelectorAll('script[data-supabase-seo]').forEach((node) => node.remove());
     const script = document.createElement('script');
     script.type = 'application/ld+json';
+    script.dataset.supabaseSeo = 'true';
     script.textContent = JSON.stringify(pageData.schemaData);
     document.head.appendChild(script);
   }
@@ -89,6 +91,8 @@
     const pageData = {
       metaTitle: data.meta_title,
       metaDescription: data.meta_description,
+      ogTitle: data.og_title,
+      ogDescription: data.og_description,
       ogImage: data.og_image_url,
       canonicalUrl: data.canonical_url,
       schemaType: data.schema_type,

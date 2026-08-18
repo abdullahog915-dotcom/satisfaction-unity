@@ -1,14 +1,20 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Satisfaction Unity — Content Manager</title>
-  <!-- Favicon (optional, matches site branding) -->
-  <link rel="icon" href="/assets/favicon/favicon.ico" />
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+  <title>Satisfaction Unity Admin</title><link rel="icon" href="/assets/fevicon/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"><link rel="stylesheet" href="css/admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../js/supabase-client.js"></script>
 </head>
 <body>
-  <!-- Decap CMS (free, open-source, GitHub-based — no cost, no vendor lock-in) -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-</body>
-</html>
+  <div id="auth-view" class="auth-shell"><section class="auth-card" aria-labelledby="login-title"><img src="/assets/LOGO/newlogo.png" alt="Satisfaction Unity" class="auth-logo"><h1 id="login-title">Admin sign in</h1><p class="muted">Manage live website content through Supabase.</p>
+    <form id="login-form" class="stack"><label>Email<input id="login-email" name="email" type="email" autocomplete="username" required></label><label>Password<input id="login-password" name="password" type="password" autocomplete="current-password" required minlength="6"></label><button class="button primary" type="submit">Sign in</button><button id="forgot-password" class="button link" type="button">Forgot password?</button></form>
+    <form id="reset-form" class="stack hidden"><label>New password<input id="new-password" type="password" autocomplete="new-password" minlength="8" required></label><button class="button primary" type="submit">Set new password</button></form><p id="auth-message" class="form-message" role="status"></p>
+  </section></div>
+  <div id="access-denied" class="auth-shell hidden"><section class="auth-card"><h1>Access denied</h1><p>This account is authenticated but is not an active administrator.</p><button id="denied-signout" class="button primary">Sign out</button></section></div>
+  <div id="admin-view" class="app-shell hidden"><aside id="sidebar" class="sidebar"><div class="brand"><img src="/assets/LOGO/newlogo.png" alt="Satisfaction Unity"><div><strong>Admin</strong><small id="admin-email"></small></div></div><nav id="admin-nav" aria-label="Admin sections"><button data-route="dashboard" class="nav-item active">Dashboard</button><button data-route="products" class="nav-item">Products</button><button data-route="categories" class="nav-item">Categories</button><button data-route="banners" class="nav-item">Banners</button><button data-route="settings" class="nav-item">Site Settings</button><button data-route="seo" class="nav-item">SEO</button><button data-route="admins" class="nav-item">Admins</button></nav><button id="logout-button" class="nav-item logout">Logout</button></aside>
+    <main class="main-panel"><header class="topbar"><button id="menu-button" class="icon-button" aria-label="Toggle navigation">☰</button><div><h1 id="page-title">Dashboard</h1><p id="page-subtitle" class="muted"></p></div><a href="/" target="_blank" rel="noopener" class="button secondary">View website</a></header><section id="module-content" class="content" aria-live="polite"></section></main>
+  </div>
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-card"><button id="modal-close" class="modal-close" aria-label="Close">×</button><div id="modal-content"></div></div></div><div id="toast-region" class="toasts" aria-live="polite"></div>
+  <script src="js/ui.js"></script><script src="js/dashboard.js"></script><script src="js/products.js"></script><script src="js/categories.js"></script><script src="js/banners.js"></script><script src="js/settings.js"></script><script src="js/seo.js"></script><script src="js/admins.js"></script><script src="js/auth.js"></script><script src="js/app.js"></script>
+</body></html>

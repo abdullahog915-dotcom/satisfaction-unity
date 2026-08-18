@@ -18,9 +18,9 @@ const BannerService = {
 
       if (error) throw error;
 
-      // Transform to match legacy format
       return {
         slides: data.map(banner => ({
+          id: banner.id,
           type: banner.type,
           image: banner.type === 'image' ? banner.public_url : null,
           video: banner.type === 'video' ? banner.public_url : null,
@@ -28,6 +28,7 @@ const BannerService = {
           subtitle: banner.subtitle,
           cta_text: banner.cta_text,
           cta_link: banner.cta_link
+          ,sort_order: banner.sort_order
         }))
       };
     } catch (error) {

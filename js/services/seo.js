@@ -22,6 +22,8 @@ const SEOService = {
       return {
         metaTitle: data.meta_title,
         metaDescription: data.meta_description,
+        ogTitle: data.og_title,
+        ogDescription: data.og_description,
         ogImage: data.og_image_url,
         canonicalUrl: data.canonical_url,
         schemaType: data.schema_type,
@@ -50,6 +52,8 @@ const SEOService = {
         seoData[page.page_slug] = {
           metaTitle: page.meta_title,
           metaDescription: page.meta_description,
+          ogTitle: page.og_title,
+          ogDescription: page.og_description,
           ogImage: page.og_image_url,
           canonicalUrl: page.canonical_url,
           schemaType: page.schema_type,

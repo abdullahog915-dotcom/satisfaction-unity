@@ -12,7 +12,13 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 // (@supabase/supabase-js@2) already declares a global "supabase",
 // and redeclaring it with const/let causes a SyntaxError that
 // breaks this entire file (and silently kills every ProductService call).
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  global: {
+    // Content reads must reflect admin changes on reload. Storage media keeps
+    // normal CDN caching because replacements receive unique object paths.
+    fetch: (url, options = {}) => window.fetch(url, { ...options, cache: 'no-store' })
+  }
+});
 
 // Export for use in other scripts
 window.supabaseClient = supabaseClient;

@@ -123,19 +123,23 @@ const ProductService = {
   transformProduct(product) {
     // Sort images by sort_order
     const sortedImages = (product.images || [])
-      .sort((a, b) => a.sort_order - b.sort_order);
+      .sort((a, b) => Number(b.is_primary) - Number(a.is_primary) || a.sort_order - b.sort_order);
 
     return {
       id: product.slug,
+      databaseId: product.id,
       name: product.name,
       category: product.category?.name || '',
       categorySlug: product.category?.slug || '',
       price: product.price,
       description: product.description || '',
       images: sortedImages.map(img => img.public_url),
+      imageAlts: sortedImages.map(img => img.alt_text || product.image_alt || product.name),
       material: product.material || 'metal',
       inStock: product.in_stock,
       featured: product.featured,
+      sortOrder: product.sort_order,
+      imageRecords: sortedImages,
       seo: {
         metaTitle: product.meta_title,
         metaDescription: product.meta_description,

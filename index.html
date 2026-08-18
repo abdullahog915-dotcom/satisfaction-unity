@@ -8,6 +8,9 @@
   <script src="js/supabase-client.js"></script>
   <script src="js/services/products.js"></script>
   <script src="js/services/banners.js"></script>
+  <script src="js/services/settings.js"></script>
+  <script src="js/site-settings-loader.js" defer></script>
+  <script src="js/home-loader.js" defer></script>
   <script src="seo-loader.js" defer></script>
 <link rel="icon" type="image/png" href="assets/fevicon/favicon-32x32.png?v=2" sizes="32x32" />
 <link rel="icon" type="image/png" href="assets/fevicon/favicon-16x16.png?v=2" sizes="16x16" />
@@ -132,29 +135,13 @@ html { scroll-behavior: smooth; }
 
 <div class="hero-container">
 <div id="hero-slider" aria-live="polite">
-<div class="hero-slide active" data-index="0" role="group" aria-roledescription="slide" aria-label="Slide 1 of 4">
-<video class="hero-slide-media" autoplay muted playsinline preload="metadata" src="assets/banner-1.mp4" aria-hidden="true"></video>
-</div>
-<div class="hero-slide" data-index="1" role="group" aria-roledescription="slide" aria-label="Slide 2 of 4">
-<picture><source srcset="assets/banner-2.webp" type="image/webp"><img src="assets/banner-2.jpg" alt="" class="hero-slide-media" loading="lazy"></picture>
-</div>
-<div class="hero-slide" data-index="2" role="group" aria-roledescription="slide" aria-label="Slide 3 of 4">
-<picture><source srcset="assets/banner-3.webp" type="image/webp"><img src="assets/banner-3.jpg" alt="" class="hero-slide-media" loading="lazy"></picture>
-</div>
-<div class="hero-slide" data-index="3" role="group" aria-roledescription="slide" aria-label="Slide 4 of 4">
-<picture><source srcset="assets/banner-4.webp" type="image/webp"><img src="assets/banner-4.jpg" alt="" class="hero-slide-media" loading="lazy"></picture>
-</div>
+<div class="hero-slide active flex items-center justify-center text-ink-muted">Loading banners…</div>
 </div>
 
 <button class="hero-nav-btn hero-nav-prev" id="hero-prev" aria-label="Previous slide" type="button"><span class="material-symbols-outlined text-[24px]">chevron_left</span></button>
 <button class="hero-nav-btn hero-nav-next" id="hero-next" aria-label="Next slide" type="button"><span class="material-symbols-outlined text-[24px]">chevron_right</span></button>
 
-<div class="hero-indicators" role="tablist" aria-label="Slide indicators">
-<button class="hero-ind active" role="tab" aria-selected="true" aria-label="Slide 1" data-index="0" type="button"></button>
-<button class="hero-ind" role="tab" aria-selected="false" aria-label="Slide 2" data-index="1" type="button"></button>
-<button class="hero-ind" role="tab" aria-selected="false" aria-label="Slide 3" data-index="2" type="button"></button>
-<button class="hero-ind" role="tab" aria-selected="false" aria-label="Slide 4" data-index="3" type="button"></button>
-</div>
+<div class="hero-indicators" role="tablist" aria-label="Slide indicators"></div>
 
 </div>
 
@@ -183,18 +170,6 @@ html { scroll-behavior: smooth; }
 <div class="bg-white p-6 rounded-[18px] border border-hairline/60"><span class="material-symbols-outlined text-[28px] text-accent mb-3">bolt</span><h4 class="font-display text-[21px] font-[600] text-ink mb-1">Warm Illumination</h4><p class="font-body text-[14px] text-ink-dim">Soft ambient warmth for luxury interiors.</p></div>
 <div class="bg-white p-6 rounded-[18px] border border-hairline/60"><span class="material-symbols-outlined text-[28px] text-accent mb-3">eco</span><h4 class="font-display text-[21px] font-[600] text-ink mb-1">Mother of Pearl</h4><p class="font-body text-[14px] text-ink-dim">Natural iridescent shell inlays and crackle glass.</p></div>
 <div class="bg-white p-6 rounded-[18px] border border-hairline/60"><span class="material-symbols-outlined text-[28px] text-accent mb-3">verified</span><h4 class="font-display text-[21px] font-[600] text-ink mb-1">Artisan Quality</h4><p class="font-body text-[14px] text-ink-dim">Durable construction with timeless aesthetic appeal.</p></div>
-</div>
-
-<div class="hero-content">
-<div class="hero-content-inner">
-<p class="hero-text hero-text-1 font-body text-[14px] md:text-[15px] font-[500] text-white/60 uppercase tracking-[0.15em] mb-4">Handcrafted Luminaires</p>
-<h1 class="hero-text hero-text-2 font-display text-[56px] md:text-[68px] font-[700] leading-[1.05] text-white mb-5 max-md:text-[36px] max-md:leading-[1.1]" style="letter-spacing:-0.03em;">Crafted Light,<br/>Timeless Elegance</h1>
-<p class="hero-text hero-text-3 font-body text-[18px] md:text-[22px] font-[300] leading-[1.5] text-white/60 max-w-[520px] mb-10 max-md:text-[16px] max-md:max-w-none">Discover the artistry of handcrafted mother of pearl, mosaic glass, and metal luminaires.</p>
-<div class="hero-text hero-text-4 flex flex-wrap gap-4 max-md:flex-col max-md:w-full">
-<a href="#collection" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-white text-[#1d1d1f] font-body text-[15px] font-[500] rounded-full transition-all duration-300 hover:bg-white/90 hover:scale-[1.02] active:scale-[0.98]">Explore Collection</a>
-<a href="about.html" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-transparent text-white/80 font-body text-[15px] font-[500] rounded-full border border-white/20 transition-all duration-300 hover:bg-white/10 hover:border-white/40 hover:text-white active:scale-[0.98]">Learn More</a>
-</div>
-</div>
 </div>
 
 </section>
@@ -247,6 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
         overlay.classList.remove('hidden'); overlay.classList.add('block');
     });
 
+    if (!window.SUPABASE_HOME_LOADER) {
     const hero = {
         current: 0,
         total: 4,
@@ -341,7 +317,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     hero.init();
 
-    // Fetch featured products from Supabase (with fallback for offline mode)
+    // Legacy renderer retained only when the Supabase home loader is unavailable.
     (async () => {
         try {
             const allProducts = await ProductService.getAll();
@@ -360,25 +336,10 @@ console.log('✅ Products loaded from SUPABASE:', products.length, 'products');
             }).join('');
             initReveal();
         } catch (error) {
-            console.warn('⚠️ Supabase failed, FALLING BACK to JSON file:', error);
-            // Fallback to local JSON if Supabase fails
-            fetch('data/products.json').then(res => res.json()).then(data => {
-                const products = Array.isArray(data) ? data : (data.products || []);
-                const homeGrid = document.getElementById('home-product-grid');
-                if (!homeGrid) return;
-                homeGrid.innerHTML = products.slice(0, 6).map((product, idx) => {
-                    const delay = (idx % 3) * 80;
-                    const images = product.images || [];
-                    const primaryImg = images[0] || 'assets/products/lamp-01-1.png';
-                    const secondaryImg = images[1] || null;
-                    const secondaryImageHtml = secondaryImg ? '<img src="'+secondaryImg+'" alt="'+product.name+'" class="product-img-secondary" onerror="handleImageError(this)" loading="lazy" />' : '';
-                    const stockBadge = product.inStock !== false ? '<span class="text-[10px] font-[600] text-emerald-700 uppercase">In Stock</span>' : '<span class="text-[10px] font-[600] text-rose-600 uppercase">Out of Stock</span>';
-                    return '<a href="/products/'+product.id+'" class="product-card group reveal" data-delay="'+delay+'"><div class="product-img-container"><img src="'+primaryImg+'" alt="'+product.name+'" class="product-img-primary" onerror="handleImageError(this)" loading="lazy" />'+secondaryImageHtml+'<div class="absolute top-3 left-3 z-10"><span class="bg-white/90 backdrop-blur-sm text-ink text-[10px] font-[600] uppercase px-2.5 py-1 rounded-full border border-hairline/50">'+product.category+'</span></div><div class="absolute top-3 right-3 z-10">'+stockBadge+'</div></div><div class="p-5"><h3 class="font-display text-[17px] font-[600] text-ink leading-snug mb-1 group-hover:text-accent transition-colors">'+product.name+'</h3><p class="font-body text-[12px] text-ink-dim uppercase mb-3">'+(product.material||'')+'</p><div class="flex justify-between items-center"><span class="font-body text-[17px] font-[600] text-ink">'+formatPrice(product.price)+'</span><span class="font-body text-[14px] text-accent font-[400]">View →</span></div></div></a>';
-                }).join('');
-                initReveal();
-            }).catch(err => console.error("Error:", err));
+            console.error('Supabase product load failed:', error);
         }
     })();
+    }
 
     function initReveal() {
         const observer = new IntersectionObserver((entries, obs) => {

@@ -1,0 +1,9 @@
+/admin/*
+  Cache-Control: no-store
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/api/*
+  Cache-Control: no-store
+  X-Content-Type-Options: nosniff

@@ -48,6 +48,8 @@ tailwind.config = {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-client.js"></script>
 <script src="js/services/products.js"></script>
+<script src="js/services/settings.js"></script>
+<script src="js/site-settings-loader.js" defer></script>
 <script src="seo-loader.js" defer></script>
 </head>
 <body class="bg-parchment text-ink antialiased selection:bg-accent selection:text-white flex flex-col min-h-screen">
@@ -121,13 +123,14 @@ function formatPrice(amount) {
     return '₹' + Number(amount).toLocaleString('en-IN');
 }
 
-window.switchImage = function(src, btnEl) {
+window.switchImage = function(src, alt, btnEl) {
     const mainImg = document.getElementById('main-product-img');
     if (!mainImg) return;
     mainImg.dataset.fallbackStep = '';
     mainImg.style.opacity = '0';
     setTimeout(() => {
         mainImg.src = src;
+        mainImg.alt = alt;
         mainImg.style.opacity = '1';
     }, 150);
     document.querySelectorAll('.thumb-btn').forEach(btn => {
@@ -137,6 +140,8 @@ window.switchImage = function(src, btnEl) {
     btnEl.classList.remove('border-hairline');
     btnEl.classList.add('border-accent');
 };
+
+function escapeHtml(value) { return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char])); }
 
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('mobile-menu-btn').addEventListener('click', function() {
@@ -158,27 +163,18 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    // Load product from Supabase with fallback to JSON
+    // Supabase is the only product source of truth.
     (async () => {
         try {
-            let product = await ProductService.getBySlug(productId);
-            if (!product) throw new Error('Product not found');
+            const [product] = await Promise.all([ProductService.getBySlug(productId), window.siteSettingsReady || Promise.resolve({})]);
+            if (!product) {
+                container.innerHTML = '<p class="text-center text-ink-muted py-24">Product not found. <a href="products.html" class="text-accent hover:underline">Browse Collection</a></p>';
+                return;
+            }
             renderProduct(product);
         } catch (err) {
-            console.warn('⚠️ Supabase failed, FALLING BACK to JSON file:', err);
-            fetch('data/products.json', { cache: 'no-store' })
-            .then(response => response.json())
-            .then(data => {
-                const products = Array.isArray(data) ? data : data.products;
-                const product = products.find(p => p.id === productId);
-                if (!product) {
-                    container.innerHTML = '<p class="text-center text-ink-muted py-24">Product not found. <a href="products.html" class="text-accent hover:underline">Browse Collection</a></p>';
-                    return;
-                }
-                renderProduct(product);
-            }).catch(err => {
-                container.innerHTML = '<p class="text-center text-ink-muted py-24">Error loading product. <a href="products.html" class="text-accent hover:underline">Browse Collection</a></p>';
-            });
+            console.error('Supabase product load failed:', err);
+            container.innerHTML = '<p class="text-center text-ink-muted py-24">Error loading product. <a href="products.html" class="text-accent hover:underline">Browse Collection</a></p>';
         }
     })();
 
@@ -186,15 +182,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const img0 = product.images[0];
         const img1 = product.images[1] || product.images[0];
-        const imgAlt = (product.seo && product.seo.imageAlt) || product.name;
+        const imgAlt = product.imageAlts?.[0] || (product.seo && product.seo.imageAlt) || product.name;
+        const imgAlt1 = product.imageAlts?.[1] || imgAlt;
+        const safeName = escapeHtml(product.name);
+        const safeCategory = escapeHtml(product.category);
+        const safeMaterial = escapeHtml(product.material || '');
+        const safeDescription = escapeHtml(product.description || '').replace(/\n/g, '<br>');
 
         const stockBadge = product.inStock
             ? '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> In Stock</span>'
             : '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span> Out of Stock</span>';
 
-        const productPageUrl = `https://satisfaction-unity.pages.dev/products/${product.id}`;
+        const productPageUrl = `${window.location.origin}/products/${product.id}`;
         const whatsappMessage = encodeURIComponent(`I'm interested in ${product.name}\n${productPageUrl}`);
-        const whatsappUrl = `https://wa.me/919045253529?text=${whatsappMessage}`;
+        const whatsappUrl = `https://wa.me/${window.__siteWhatsapp || '919045253529'}?text=${whatsappMessage}`;
 
         // ---- SEO: per-product title, meta description, OG tags, schema ----
         (function applyProductSEO() {
@@ -246,27 +247,27 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
                 <div class="lg:col-span-7 flex flex-col gap-6">
                     <div class="relative w-full aspect-square rounded-[18px] overflow-hidden border border-hairline bg-white flex items-center justify-center p-6 shadow-lg">
-                        <img id="main-product-img" src="${img0}" alt="${imgAlt}" class="w-full h-full object-contain" onerror="handleImageError(this)" />
+                        <img id="main-product-img" src="${escapeHtml(img0)}" alt="${escapeHtml(imgAlt)}" class="w-full h-full object-contain" onerror="handleImageError(this)" />
                         <div class="absolute top-4 left-4 z-10">
-                            <span class="bg-white/90 backdrop-blur-md text-accent border border-hairline text-xs font-semibold px-3 py-1.5 rounded-full">${product.category}</span>
+                            <span class="bg-white/90 backdrop-blur-md text-accent border border-hairline text-xs font-semibold px-3 py-1.5 rounded-full">${safeCategory}</span>
                         </div>
                     </div>
                     <div class="flex gap-4">
-                        <button onclick="switchImage('${img0}', this)" class="thumb-btn active w-24 h-24 rounded-xl overflow-hidden border-2 border-accent transition-all bg-white p-2 relative flex-shrink-0">
-                            <img src="${img0}" alt="${imgAlt} View 1" class="w-full h-full object-contain" onerror="handleImageError(this)" />
+                        <button data-product-image="${escapeHtml(img0)}" data-product-alt="${escapeHtml(imgAlt)}" class="thumb-btn active w-24 h-24 rounded-xl overflow-hidden border-2 border-accent transition-all bg-white p-2 relative flex-shrink-0">
+                            <img src="${escapeHtml(img0)}" alt="${escapeHtml(imgAlt)}" class="w-full h-full object-contain" onerror="handleImageError(this)" />
                         </button>
-                        <button onclick="switchImage('${img1}', this)" class="thumb-btn w-24 h-24 rounded-xl overflow-hidden border-2 border-hairline hover:border-accent transition-all bg-white p-2 relative flex-shrink-0">
-                            <img src="${img1}" alt="${imgAlt} View 2" class="w-full h-full object-contain" onerror="handleImageError(this)" />
+                        <button data-product-image="${escapeHtml(img1)}" data-product-alt="${escapeHtml(imgAlt1)}" class="thumb-btn w-24 h-24 rounded-xl overflow-hidden border-2 border-hairline hover:border-accent transition-all bg-white p-2 relative flex-shrink-0">
+                            <img src="${img1}" alt="${escapeHtml(imgAlt1)}" class="w-full h-full object-contain" onerror="handleImageError(this)" />
                         </button>
                     </div>
                 </div>
 
                 <div class="lg:col-span-5 flex flex-col">
                     <div class="flex justify-between items-center mb-4">
-                        <span class="font-body text-xs font-[600] text-accent uppercase">${product.category}</span>
+                        <span class="font-body text-xs font-[600] text-accent uppercase">${safeCategory}</span>
                         ${stockBadge}
                     </div>
-                    <h1 class="font-display text-[40px] md:text-[48px] font-[600] leading-[1.10] text-ink mb-4">${product.name}</h1>
+                    <h1 class="font-display text-[40px] md:text-[48px] font-[600] leading-[1.10] text-ink mb-4">${safeName}</h1>
                     <div class="mb-8 pb-6 border-b border-hairline/60">
                         <div class="flex items-baseline gap-3 mb-6">
                             <span class="font-display text-[34px] font-[600] text-accent">${formatPrice(product.price)}</span>
@@ -282,19 +283,20 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span class="font-body text-xs font-[600] text-ink-dim uppercase mb-1 block">Craftsmanship & Material</span>
                         <span class="font-body text-[14px] text-ink font-[400] capitalize flex items-center gap-2">
                             <span class="material-symbols-outlined text-accent text-[18px]">verified</span>
-                            ${product.material}
+                            ${safeMaterial}
                         </span>
                     </div>
                     ` : ''}
                     <div class="mb-6">
                         <h3 class="font-body text-xs font-[600] text-ink-dim uppercase mb-3">About This Piece</h3>
-                        <div class="product-description-text font-body text-[16px] text-ink-muted leading-[1.7]">${product.description}</div>
+                        <div class="product-description-text font-body text-[16px] text-ink-muted leading-[1.7]">${safeDescription}</div>
                     </div>
                 </div>
             </div>
         `;
+        container.querySelectorAll('[data-product-image]').forEach((button) => button.addEventListener('click', () => switchImage(button.dataset.productImage, button.dataset.productAlt, button)));
     }
 });
 </script>
 </body>
-</html>`r`n
+</html>
