@@ -82,6 +82,7 @@ tailwind.config = {
 <span class="font-body text-[16px]">Loading...</span>
 </div>
 </div>
+<div id="similar-products-section" class="mt-20"></div>
 </main>
 
 <footer class="w-full px-6 py-16" style="background: #f5f5f7;">
@@ -143,6 +144,36 @@ window.switchImage = function(src, alt, btnEl) {
 
 function escapeHtml(value) { return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char])); }
 
+    async function renderSimilarProducts(product) {
+        const section = document.getElementById('similar-products-section');
+        if (!section || !product.categorySlug) { if (section) section.innerHTML = ''; return; }
+        try {
+            const list = await ProductService.getByCategory(product.categorySlug);
+            const similar = list.filter(p => p.id !== product.id).slice(0, 4);
+            if (!similar.length) { section.innerHTML = ''; return; }
+            section.innerHTML = `
+                <h2 class="font-display text-[26px] md:text-[30px] font-[600] text-ink mb-6">Similar Lamps</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+                    ${similar.map(p => {
+                        const img = (p.images && p.images[0]) || '';
+                        const alt = (p.imageAlts && p.imageAlts[0]) || p.name;
+                        return `<a href="/products/${encodeURIComponent(p.id)}" class="similar-card group block bg-white border border-hairline rounded-[16px] overflow-hidden transition-transform hover:scale-[1.02]">
+                            <div class="w-full aspect-square bg-parchment flex items-center justify-center p-4">
+                                <img src="${escapeHtml(img)}" alt="${escapeHtml(alt)}" class="w-full h-full object-contain" onerror="handleImageError(this)" loading="lazy" />
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-display text-[14px] font-[600] text-ink leading-snug mb-1 group-hover:text-accent transition-colors truncate">${escapeHtml(p.name)}</h3>
+                                <span class="font-body text-[14px] font-[600] text-ink">${formatPrice(p.price)}</span>
+                            </div>
+                        </a>`;
+                    }).join('')}
+                </div>`;
+        } catch (err) {
+            console.error('Failed to load similar products:', err);
+        }
+    }
+
+    // Supabase is the only product source of truth.
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('mobile-menu-btn').addEventListener('click', function() {
         const menu = document.getElementById('mobile-menu');
@@ -171,7 +202,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 container.innerHTML = '<p class="text-center text-ink-muted py-24">Product not found. <a href="products.html" class="text-accent hover:underline">Browse Collection</a></p>';
                 return;
             }
-            renderProduct(product);
+                       renderProduct(product);
+            renderSimilarProducts(product);
         } catch (err) {
             console.error('Supabase product load failed:', err);
             container.innerHTML = '<p class="text-center text-ink-muted py-24">Error loading product. <a href="products.html" class="text-accent hover:underline">Browse Collection</a></p>';
