@@ -180,10 +180,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function renderProduct(product) {
 
-        const img0 = product.images[0];
-        const img1 = product.images[1] || product.images[0];
-        const imgAlt = product.imageAlts?.[0] || (product.seo && product.seo.imageAlt) || product.name;
-        const imgAlt1 = product.imageAlts?.[1] || imgAlt;
+        const allImages = (product.images && product.images.length) ? product.images : ['/assets/placeholder.png'];
+        const allAlts = product.imageAlts && product.imageAlts.length ? product.imageAlts : [product.name];
+        const img0 = allImages[0];
+        const imgAlt = allAlts[0] || (product.seo && product.seo.imageAlt) || product.name;
         const safeName = escapeHtml(product.name);
         const safeCategory = escapeHtml(product.category);
         const safeMaterial = escapeHtml(product.material || '');
@@ -252,13 +252,11 @@ document.addEventListener('DOMContentLoaded', function() {
                             <span class="bg-white/90 backdrop-blur-md text-accent border border-hairline text-xs font-semibold px-3 py-1.5 rounded-full">${safeCategory}</span>
                         </div>
                     </div>
-                    <div class="flex gap-4">
-                        <button data-product-image="${escapeHtml(img0)}" data-product-alt="${escapeHtml(imgAlt)}" class="thumb-btn active w-24 h-24 rounded-xl overflow-hidden border-2 border-accent transition-all bg-white p-2 relative flex-shrink-0">
-                            <img src="${escapeHtml(img0)}" alt="${escapeHtml(imgAlt)}" class="w-full h-full object-contain" onerror="handleImageError(this)" />
-                        </button>
-                        <button data-product-image="${escapeHtml(img1)}" data-product-alt="${escapeHtml(imgAlt1)}" class="thumb-btn w-24 h-24 rounded-xl overflow-hidden border-2 border-hairline hover:border-accent transition-all bg-white p-2 relative flex-shrink-0">
-                            <img src="${img1}" alt="${escapeHtml(imgAlt1)}" class="w-full h-full object-contain" onerror="handleImageError(this)" />
-                        </button>
+                                       <div class="flex gap-4 flex-wrap">
+                        ${allImages.map((src, i) => `
+                        <button data-product-image="${escapeHtml(src)}" data-product-alt="${escapeHtml(allAlts[i] || imgAlt)}" class="thumb-btn ${i === 0 ? 'active' : ''} w-24 h-24 rounded-xl overflow-hidden border-2 ${i === 0 ? 'border-accent' : 'border-hairline hover:border-accent'} transition-all bg-white p-2 relative flex-shrink-0">
+                            <img src="${escapeHtml(src)}" alt="${escapeHtml(allAlts[i] || imgAlt)}" class="w-full h-full object-contain" onerror="handleImageError(this)" />
+                        </button>`).join('')}
                     </div>
                 </div>
 
