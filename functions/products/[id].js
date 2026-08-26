@@ -21,7 +21,7 @@ export async function onRequest({ request, env, params }) {
     const [product] = await dataResponse.json();
     if (!product) return new Response(html, { headers: { 'content-type': 'text/html; charset=UTF-8' } });
 
-    const images = (product.product_images || []).sort((a, b) => Number(b.is_primary) - Number(a.is_primary) || a.sort_order - b.sort_order);
+    const images = [...(product.product_images || [])].sort((a, b) => Number(a.sort_order ?? 0) - Number(b.sort_order ?? 0) || Number(b.is_primary) - Number(a.is_primary));
     const pageUrl = `${origin}/products/${product.slug}`;
     const seoTitle = product.meta_title || `${product.name} | Satisfaction Unity`;
     const seoDesc = product.meta_description || (product.description || '').slice(0, 155);

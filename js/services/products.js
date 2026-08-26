@@ -122,8 +122,8 @@ const ProductService = {
    */
   transformProduct(product) {
     // Sort images by sort_order
-    const sortedImages = (product.images || [])
-      .sort((a, b) => Number(b.is_primary) - Number(a.is_primary) || a.sort_order - b.sort_order);
+    const sortedImages = [...(product.images || [])]
+      .sort((a, b) => Number(a.sort_order ?? 0) - Number(b.sort_order ?? 0) || Number(b.is_primary) - Number(a.is_primary));
 
     return {
       id: product.slug,
